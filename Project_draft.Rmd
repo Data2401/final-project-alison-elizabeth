@@ -48,10 +48,6 @@ deaths_df %>% filter(country=="United States") %>%
   select(year, ozone_deaths) %>% 
   ggplot() + 
   geom_point(aes(x=year, y=ozone_deaths))
-
-
-
-
 ```
 
 
@@ -67,8 +63,6 @@ deaths_df %>%
   select(total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   filter(deaths_df$acronym == "USA") %>% 
   summarize(mean(total_deaths))
-
-
 ```
 
 
