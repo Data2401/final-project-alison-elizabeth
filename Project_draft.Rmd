@@ -1,0 +1,101 @@
+---
+title: "Project draft"
+author: "Alison Cheek"
+date: "4/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+```
+
+#Import air pollution deaths csv and tidy
+
+```{r}
+
+deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv", stringsAsFactors = FALSE))
+
+glimpse(deaths_df)
+
+colnames(deaths_df)
+
+colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", 
+                         "indoor_deaths", "outdoor_deaths", "ozone_deaths")
+
+```
+
+
+#Explore data
+```{r}
+#glimpse(deaths_df)
+
+deaths_df %>% filter(country=="United States") %>%
+  select(year, indoor_deaths) %>% 
+  ggplot() + 
+  geom_point(aes(x=year, y=indoor_deaths))
+
+deaths_df %>% filter(country=="United States") %>%
+  select(year, outdoor_deaths) %>% 
+  ggplot() + 
+  geom_point(aes(x=year, y=outdoor_deaths))
+
+deaths_df %>% filter(country=="United States") %>%
+  select(year, ozone_deaths) %>% 
+  ggplot() + 
+  geom_point(aes(x=year, y=ozone_deaths))
+
+
+
+
+```
+
+
+
+#
+```{r}
+deaths_df %>% 
+  select(total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  filter(deaths_df$acronym == "AFG") %>% 
+  summarize(mean(total_deaths))
+
+deaths_df %>% 
+  select(total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  filter(deaths_df$acronym == "USA") %>% 
+  summarize(mean(total_deaths))
+
+
+```
+
+
+
+
+#
+
+
+
+#
+
+
+
+#
+
+
+
+#
+
+
+
+#
+
+
+
+#
+
+
+
+
