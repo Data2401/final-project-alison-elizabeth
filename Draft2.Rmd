@@ -1,0 +1,27 @@
+---
+title: "Draft2"
+output: slidy_presentation
+date: '2022-04-18'
+---
+
+# Load libraries 
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+# Add in Data 
+```{r}
+read_csv('death-rates-from-air-pollution.csv')
+```
+
+# Questions to Consider 
+
+## Which country has the greatest number of deaths? The least?
+
+## Which type of air pollution has the greatest number of deaths (indoor, outdoor, particulate, or outdoor ozone)?
+
+## Which year had the worst air pollution (average the three diff types)?
+
+## Which year had the worst indoor? Outdoor particulate? Outdoor ozone?
