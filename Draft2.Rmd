@@ -13,7 +13,8 @@ library(ggplot2)
 
 # Add in Data 
 ```{r}
-read_csv('death-rates-from-air-pollution.csv')
+deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
+deaths_df
 ```
 
 # Questions to Consider 
