@@ -32,40 +32,104 @@ glimpse(deaths_df)
 
 #Maybe try increments...?
 #When looking at it you can see a decrease among the three years 
-death_07<- deaths_df %>% 
-  group_by(country) %>% 
-  filter(year == 2007) %>% 
-  select(total_deaths) %>% 
-  summarize(average_death_07 = mean(total_deaths))
+#death_07<- deaths_df %>% 
+  #group_by(country) %>% 
+  #filter(year == 2007) %>% 
+  #select(total_deaths) %>% 
+  #summarize(average_death_07 = mean(total_deaths))
 
-death_12<- deaths_df %>% 
-  group_by(country) %>% 
-  filter(year == 2012) %>% 
-  select(total_deaths) %>% 
-  summarize(average_death_12 = mean(total_deaths))
+#death_12<- deaths_df %>% 
+  #group_by(country) %>% 
+  #filter(year == 2012) %>% 
+  #select(total_deaths) %>% 
+  #summarize(average_death_12 = mean(total_deaths))
 
-death_17<- deaths_df %>% 
-  group_by(country) %>% 
-  filter(year == 2017) %>% 
-  select(total_deaths) %>% 
-  summarize(average_death_17 = mean(total_deaths))
+#death_17<- deaths_df %>% 
+  #group_by(country) %>% 
+  #filter(year == 2017) %>% 
+  #select(total_deaths) %>% 
+  #summarize(average_death_17 = mean(total_deaths))
 
 #try to have one cohesive table so it's easier to visualize 
-combo <- death_07 %>% 
-  mutate(death_12) %>% 
-  mutate(death_17)
+#combo <- death_07 %>% 
+  #mutate(death_12) %>% 
+  #mutate(death_17)
 
-combo
+#combo
 
 #Then graph it 
 #Just realized there's 200+ countries....the x-axis looks terrible 
 #Would be nice to color by continent but then that would mean going through each country
-ggplot(death_07, aes(x= country, y=average_death_07)) +
-  geom_point() +
-  theme(axis.text.x = element_text(angle = 15)) #yah..no rotation made it worse
+#ggplot(death_07, aes(x= country, y=average_death_07)) +
+  #geom_point() +
+  #theme(axis.text.x = element_text(angle = 15)) #yah..no rotation made it worse
+
+#SCRATCH WORK ABOVE 
 
 #Not sure if we want to use the selected few countries we looked at earlier?
 #Or if we wanted to use this as a overview of the data
+
+#separation by high vs low population among continents 
+death_07_high <- deaths_df %>% 
+  filter(year == 2007, country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_07_high = mean(total_deaths))
+
+
+death_07_low<- deaths_df %>% 
+  filter(year == 2007, country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_07_low = mean(total_deaths))
+
+#Combo table 2007
+combo_07<- death_07_high %>% 
+  mutate(death_07_low)
+combo_07
+
+death_12_high <- deaths_df %>% 
+  filter(year == 2012, country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_12_high = mean(total_deaths))
+
+
+death_12_low<- deaths_df %>% 
+  filter(year == 2012, country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_12_low = mean(total_deaths))
+
+#Combo table 2012
+combo_12<- death_12_high %>% 
+  mutate(death_12_low)
+combo_12
+
+death_17_high <- deaths_df %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_17_high = mean(total_deaths))
+
+
+death_17_low<- deaths_df %>% 
+  filter(year == 2017, country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_17_low = mean(total_deaths))
+
+
+#Combo table 2017
+combo_17<- death_17_high %>% 
+  mutate(death_17_low)
+combo_17
+
+#Graph selected countries 
+#Is there a way to color by low and high?
+combo_07 %>% 
+  ggplot(aes(x = country, y = average_death_07_low)) + 
+  geom_point()
 ```
 
 ## Which type of air pollution has the greatest number of deaths (indoor, outdoor, particulate, or outdoor ozone)?
