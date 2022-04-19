@@ -64,6 +64,10 @@ glimpse(deaths_df)
   #geom_point() +
   #theme(axis.text.x = element_text(angle = 15)) #yah..no rotation made it worse
 
+
+```
+
+```{r}
 #SCRATCH WORK ABOVE 
 
 #Not sure if we want to use the selected few countries we looked at earlier?
@@ -126,9 +130,13 @@ combo_17<- death_17_high %>%
 combo_17
 
 #Graph selected countries 
-#Is there a way to color by low and high?
+#Is there a way to color by low and high and combine the two graphs below?
 combo_07 %>% 
   ggplot(aes(x = country, y = average_death_07_low)) + 
+  geom_point()
+
+combo_07 %>% 
+  ggplot(aes(x = country, y = average_death_07_high)) + 
   geom_point()
 ```
 
