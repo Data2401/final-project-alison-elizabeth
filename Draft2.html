@@ -33070,11 +33070,12 @@ outdoor, particulate, or outdoor ozone)?</h2>
 ## 10 Armenia                  32.6          53.5   4.80   
 ## # … with 221 more rows</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sort descending to see which country had the highest of each...(not sure if this is right)</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>deaths_df <span class="sc">%&gt;%</span> </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(indoor_deaths, outdoor_deaths, ozone_deaths) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_indoor =</span> <span class="fu">mean</span>(indoor_deaths), <span class="at">avg_outdoor =</span> <span class="fu">mean</span>(outdoor_deaths), <span class="at">avg_ozone =</span> <span class="fu">mean</span>(ozone_deaths)) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_indoor), <span class="fu">desc</span>(avg_outdoor), <span class="fu">desc</span>(avg_ozone))</span></code></pre></div>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#does separating the arrange individually fix it??</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>deaths_df <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(indoor_deaths, outdoor_deaths, ozone_deaths) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_indoor =</span> <span class="fu">mean</span>(indoor_deaths), <span class="at">avg_outdoor =</span> <span class="fu">mean</span>(outdoor_deaths), <span class="at">avg_ozone =</span> <span class="fu">mean</span>(ozone_deaths)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_indoor), <span class="fu">desc</span>(avg_outdoor), <span class="fu">desc</span>(avg_ozone))</span></code></pre></div>
 <pre><code>## Adding missing grouping variables: `country`</code></pre>
 <pre><code>## # A tibble: 231 × 4
 ##    country                  avg_indoor avg_outdoor avg_ozone
@@ -33092,8 +33093,32 @@ outdoor, particulate, or outdoor ozone)?</h2>
 ## # … with 221 more rows</code></pre>
 <h2 id="which-year-had-the-worst-air-pollution-average-the-three-diff-types">Which
 year had the worst air pollution (average the three diff types)?</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>deaths_df <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country, year) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_indoor =</span> <span class="fu">mean</span>(indoor_deaths), <span class="at">avg_outdoor =</span> <span class="fu">mean</span>(outdoor_deaths), <span class="at">avg_ozone =</span> <span class="fu">mean</span>(ozone_deaths)) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_indoor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_outdoor)) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_ozone))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;country&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 6,468 × 5
+## # Groups:   country [231]
+##    country      year avg_indoor avg_outdoor avg_ozone
+##    &lt;chr&gt;       &lt;int&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1 North Korea  1999       115.        43.4      37.4
+##  2 North Korea  1998       113.        43.5      37.2
+##  3 North Korea  2000       117.        43.4      37.2
+##  4 North Korea  2001       117.        43.5      36.8
+##  5 North Korea  1997       110.        43.0      36.6
+##  6 North Korea  2002       117.        43.7      36.4
+##  7 North Korea  1996       107.        42.3      35.8
+##  8 North Korea  2003       116.        43.3      35.7
+##  9 China        1990       108.        56.1      35.3
+## 10 China        1991       104.        57.7      34.9
+## # … with 6,458 more rows</code></pre>
 <h2 id="which-year-had-the-worst-indoor-outdoor-particulate-outdoor-ozone">Which
 year had the worst indoor? Outdoor particulate? Outdoor ozone?</h2>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Probably need to fix the above to answer this one </span></span></code></pre></div>
 </div>
 <div id="notes-from-first-meeting" class="slide section level1">
 <h1>Notes from first meeting</h1>

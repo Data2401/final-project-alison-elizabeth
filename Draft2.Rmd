@@ -152,6 +152,7 @@ deaths_df %>%
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
   
 #Sort descending to see which country had the highest of each...(not sure if this is right)
+#does separating the arrange individually fix it??
 deaths_df %>% 
   group_by(country) %>% 
   select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
@@ -162,15 +163,18 @@ deaths_df %>%
 ## Which year had the worst air pollution (average the three diff types)?
 
 ```{r}
-
-
-
+deaths_df %>% 
+  group_by(country, year) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths)) %>% 
+  arrange(desc(avg_indoor)) %>% 
+  arrange(desc(avg_outdoor)) %>% 
+  arrange(desc(avg_ozone))
 ````
 
 ## Which year had the worst indoor? Outdoor particulate? Outdoor ozone?
 
 ```{r}
-
+#Probably need to fix the above to answer this one 
 
 
 ````
