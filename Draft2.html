@@ -33039,6 +33039,57 @@ population)</h2>
 <h2 id="which-type-of-air-pollution-has-the-greatest-number-of-deaths-indoor-outdoor-particulate-or-outdoor-ozone">Which
 type of air pollution has the greatest number of deaths (indoor,
 outdoor, particulate, or outdoor ozone)?</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(deaths_df)</span></code></pre></div>
+<pre><code>## Rows: 6,468
+## Columns: 7
+## $ country        &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanist…
+## $ acronym        &lt;chr&gt; &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;, &quot;AFG&quot;,…
+## $ year           &lt;int&gt; 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1…
+## $ total_deaths   &lt;dbl&gt; 299.4773, 291.2780, 278.9631, 278.7908, 287.1629, 288.0…
+## $ indoor_deaths  &lt;dbl&gt; 250.3629, 242.5751, 232.0439, 231.6481, 238.8372, 239.9…
+## $ outdoor_deaths &lt;dbl&gt; 46.44659, 46.03384, 44.24377, 44.44015, 45.59433, 45.36…
+## $ ozone_deaths   &lt;dbl&gt; 5.616442, 5.603960, 5.611822, 5.655266, 5.718922, 5.739…</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This is the average of all countries by type of air pollutant death</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>deaths_df <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(indoor_deaths, outdoor_deaths, ozone_deaths) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_indoor =</span> <span class="fu">mean</span>(indoor_deaths), <span class="at">avg_outdoor =</span> <span class="fu">mean</span>(outdoor_deaths), <span class="at">avg_ozone =</span> <span class="fu">mean</span>(ozone_deaths))</span></code></pre></div>
+<pre><code>## Adding missing grouping variables: `country`</code></pre>
+<pre><code>## # A tibble: 231 × 4
+##    country              avg_indoor avg_outdoor avg_ozone
+##    &lt;chr&gt;                     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Afghanistan             204.           46.0   5.80   
+##  2 Albania                  35.1          22.3   2.60   
+##  3 Algeria                   1.50         50.5   2.23   
+##  4 American Samoa           32.7          37.7   0.00664
+##  5 Andean Latin America     27.9          25.5   0.979  
+##  6 Andorra                   0.398        18.4   2.87   
+##  7 Angola                  131.           28.8   7.20   
+##  8 Antigua and Barbuda       3.38         38.2   0.00141
+##  9 Argentina                 7.52         31.7   1.27   
+## 10 Armenia                  32.6          53.5   4.80   
+## # … with 221 more rows</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Sort descending to see which country had the highest of each...(not sure if this is right)</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>deaths_df <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(indoor_deaths, outdoor_deaths, ozone_deaths) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_indoor =</span> <span class="fu">mean</span>(indoor_deaths), <span class="at">avg_outdoor =</span> <span class="fu">mean</span>(outdoor_deaths), <span class="at">avg_ozone =</span> <span class="fu">mean</span>(ozone_deaths)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_indoor), <span class="fu">desc</span>(avg_outdoor), <span class="fu">desc</span>(avg_ozone))</span></code></pre></div>
+<pre><code>## Adding missing grouping variables: `country`</code></pre>
+<pre><code>## # A tibble: 231 × 4
+##    country                  avg_indoor avg_outdoor avg_ozone
+##    &lt;chr&gt;                         &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Papua New Guinea               259.        26.7    0.194 
+##  2 Afghanistan                    204.        46.0    5.80  
+##  3 Solomon Islands                200.        18.8    0.0392
+##  4 Oceania                        197.        28.4    0.259 
+##  5 Somalia                        194.        17.4    1.55  
+##  6 Guinea-Bissau                  183.        21.3    2.64  
+##  7 Central African Republic       182.        38.8    6.29  
+##  8 Sierra Leone                   172.        14.0    2.05  
+##  9 Madagascar                     168.        17.1    2.28  
+## 10 Guinea                         167.        14.2    2.48  
+## # … with 221 more rows</code></pre>
 <h2 id="which-year-had-the-worst-air-pollution-average-the-three-diff-types">Which
 year had the worst air pollution (average the three diff types)?</h2>
 <h2 id="which-year-had-the-worst-indoor-outdoor-particulate-outdoor-ozone">Which
