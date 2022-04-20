@@ -25,3 +25,31 @@ read_csv('death-rates-from-air-pollution.csv')
 ## Which year had the worst air pollution (average the three diff types)?
 
 ## Which year had the worst indoor? Outdoor particulate? Outdoor ozone?
+
+##Focus in on some countries/ continents
+
+##Pull in more data on populations for the selected countries
+
+##Industrial and non industrial zones, what countries have coal plants? oil plants? 
+
+
+##Years to focus on: 2007 to 2017, 
+
+##Countries:
+#US - north america - high pop
+#Canada - north america - low pop
+
+#Brazil - S america - high pop
+#Argentina - S America - low pop
+
+#Ethiopia - Africa - high pop
+#Seychellas - Africa - low pop
+
+#Russia - Europe - high pop
+#Romania - Europe - low pop
+
+#China - Asia - high pop 
+#Israel - Asia - low pop
+
+#Australis - Oceania - high pop
+#Tonga - Oceania - low pop

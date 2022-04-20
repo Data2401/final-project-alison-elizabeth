@@ -7,6 +7,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
 
 library(tidyverse)
 library(dplyr)
@@ -74,8 +77,13 @@ deaths_df %>%
 
 
 
-#
+#filter to north american countries american and canada 
+#in the years 2007 - 2017
+```{r}
+deaths_df %>% filter(country == "United States" & year > 1999)
 
+
+```
 
 
 #
