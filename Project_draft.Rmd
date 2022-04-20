@@ -77,12 +77,6 @@ deaths_df %>%
 
 
 
-#filter to north american countries american and canada 
-#in the years 2007 - 2017
-```{r}
-america <- deaths_df %>% filter(country == "United States" & year > 1999)
-canada <- deaths_df %>% filter(country == "Canada" & year > 1999)
-
 ```
 
 

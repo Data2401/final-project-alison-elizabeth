@@ -214,3 +214,38 @@ deaths_df %>%
 
 ## Look at industrialized vs non-industrialized countries 
 >>>>>>> a099fd8818f069a204f274675f043d2f94067c4a
+
+
+
+#Alison's scratch work! :) 
+
+
+#Filtering to desired countries
+```{r}
+#north america
+america <- deaths_df %>% filter(country == "United States" & year > 1999)
+canada <- deaths_df %>% filter(country == "Canada" & year > 1999)
+
+
+#south america 
+brazil <- deaths_df %>% filter(country == "Brazil" & year > 1999)
+argentina <- deaths_df %>% filter(country == "Argentina" & year > 1999)
+
+#Africa
+ethiopia <- deaths_df %>% filter(country == "Ethiopia" & year > 1999)
+seychellas <- deaths_df %>% filter(country == "Seychellas" & year > 1999)
+
+#Europe
+russia <- deaths_df %>% filter(country == "Russia" & year > 1999)
+romania <- deaths_df %>% filter(country == "Romania" & year > 1999)
+
+#asia
+china <- deaths_df %>% filter(country == "China" & year > 1999)
+israel <- deaths_df %>% filter(country == "Israel" & year > 1999)
+
+#Oceania
+australia <- deaths_df %>% filter(country == "Australia" & year > 1999)
+tonga <- deaths_df %>% filter(country == "Tonga" & year > 1999)
+
+```
+
