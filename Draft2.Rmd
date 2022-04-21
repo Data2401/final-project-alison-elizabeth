@@ -236,6 +236,46 @@ deaths_df %>%
   ggtitle("Ozone Air Pollutant Deaths")+
   xlab("Deaths per 100,000")+
   ylab("Country")
+
+#Having fun with plots
+#total deaths
+deaths_df %>% 
+    filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
+                          'Israel', 'Tonga','United States', 'Brazil', 
+                          'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country, year, total_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, total_deaths, color = country))+
+  ggtitle("Total deaths throughout the years in sample countries")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+
+
+#indoor deaths
+deaths_df %>% 
+    filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
+                          'Israel', 'Tonga','United States', 'Brazil', 
+                          'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("Indoor deaths throughout the years in sample countries")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+
+#ozone deaths
+deaths_df %>% 
+    filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
+                          'Israel', 'Tonga','United States', 'Brazil', 
+                          'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("Ozone deaths throughout the years in sample countries")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+
+  
   
 #Sort descending to see which country had the highest of each...(not sure if this is right)
 #does separating the arrange individually fix it??
