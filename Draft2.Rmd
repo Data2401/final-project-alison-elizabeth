@@ -92,6 +92,15 @@ combo_07<- death_07_high %>%
   mutate(death_07_low)
 combo_07
 
+#dataframe for 2007 high vs low - pop countries
+df_07<- data.frame(death_07_high, death_07_low)
+df_07
+colnames(df_07)
+colnames(df_07) <- c("high-pop country", "average_death_07_high", 
+                     "low-pop country", "average_death_07_low")
+df_07
+
+
 death_12_high <- deaths_df %>% 
   filter(year == 2012, country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
   group_by(country) %>% 
@@ -109,6 +118,14 @@ death_12_low<- deaths_df %>%
 combo_12<- death_12_high %>% 
   mutate(death_12_low)
 combo_12
+
+#Data frame for 2012
+df_12<- data.frame(death_12_high, death_12_low)
+df_12
+
+colnames(df_12) <- c("high-pop country", "average_death_12_high", 
+                     "low-pop country", "average_death_12_low")
+df_12
 
 death_17_high <- deaths_df %>% 
   filter(year == 2017, country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
@@ -129,15 +146,29 @@ combo_17<- death_17_high %>%
   mutate(death_17_low)
 combo_17
 
+#Data frame for 2017
+df_17<- data.frame(death_17_high, death_17_low)
+df_17
+
+colnames(df_17) <- c("high-pop country", "average_death_17_high", 
+                     "low-pop country", "average_death_17_low")
+df_17
+
 #Graph selected countries 
 #Is there a way to color by low and high and combine the two graphs below?
 combo_07 %>% 
-  ggplot(aes(x = country, y = average_death_07_low)) + 
-  geom_point()
+  ggplot() + 
+  geom_col(mapping = aes(x = country, y = average_death_07_low, fill = country))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in low-population countries")
 
 combo_07 %>% 
-  ggplot(aes(x = country, y = average_death_07_high)) + 
-  geom_point()
+  ggplot() + 
+  geom_col(mapping = aes(x = country, y = average_death_07_high, fill = country))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in high-population countries")
 ```
 
 ## Which type of air pollution has the greatest number of deaths (indoor, outdoor, particulate, or outdoor ozone)?
@@ -233,7 +264,7 @@ argentina <- deaths_df %>% filter(country == "Argentina" & year > 1999)
 
 #Africa
 ethiopia <- deaths_df %>% filter(country == "Ethiopia" & year > 1999)
-seychellas <- deaths_df %>% filter(country == "Seychellas" & year > 1999)
+seychelles <- deaths_df %>% filter(country == "Seychelles" & year > 1999)
 
 #Europe
 russia <- deaths_df %>% filter(country == "Russia" & year > 1999)
@@ -248,4 +279,12 @@ australia <- deaths_df %>% filter(country == "Australia" & year > 1999)
 tonga <- deaths_df %>% filter(country == "Tonga" & year > 1999)
 
 ```
+
+#
+```{r}
+
+
+
+```
+
 
