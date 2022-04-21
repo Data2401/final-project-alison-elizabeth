@@ -198,6 +198,44 @@ deaths_df %>%
   group_by(country) %>% 
   select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
+
+#Graphs of each type of air pollutant:
+#Will work on making it more clear, but I think the distribution is cool
+#Indoor 
+deaths_df %>% 
+  group_by(country) %>% 
+  select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths),
+            avg_ozone = mean(ozone_deaths)) %>% 
+  ggplot()+
+  geom_point(mapping = aes(x=avg_indoor, y=country))+
+  ggtitle("Indoor Air Pollutant Deaths")+
+  xlab("Deaths per 100,000")+
+  ylab("Country")
+
+#Outdoor
+deaths_df %>% 
+  group_by(country) %>% 
+  select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths),
+            avg_ozone = mean(ozone_deaths)) %>% 
+  ggplot()+
+  geom_point(mapping = aes(x=avg_outdoor, y=country))+
+  ggtitle("Outdoor Air Pollutant Deaths")+
+  xlab("Deaths per 100,000")+
+  ylab("Country")
+
+#Ozone
+deaths_df %>% 
+  group_by(country) %>% 
+  select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths),
+            avg_ozone = mean(ozone_deaths)) %>% 
+  ggplot()+
+  geom_point(mapping = aes(x=avg_ozone, y=country))+
+  ggtitle("Ozone Air Pollutant Deaths")+
+  xlab("Deaths per 100,000")+
+  ylab("Country")
   
 #Sort descending to see which country had the highest of each...(not sure if this is right)
 #does separating the arrange individually fix it??
