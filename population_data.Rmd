@@ -1,0 +1,24 @@
+##Population data
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+
+```
+
+```{r}
+pop_data_stats <- read.csv("pop_worldometer_data.csv")
+
+glimpse(pop_data_stats)
+
+world_pop <- read.csv("population_total_long.csv")
+
+glimpse(world_pop)
+
+
+```
+
