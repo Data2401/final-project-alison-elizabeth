@@ -22,7 +22,15 @@ head(world_pop)
 
 ```
 
-The above is 1960 and our data is from 1990-2017 
+The above is 1960/2020 and our data is from 1990-2017
+This is a different file but won't open
+```{r}
+#This messed it up into only 1 column sep ='\t', ;, 
+pops_by_country <- read.csv("world_population.csv", sep = ';')
+glimpse(pops_by_country)
+
+#
+```
 
 
 
