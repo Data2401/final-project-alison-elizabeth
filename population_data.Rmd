@@ -1,0 +1,28 @@
+##Population data
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+
+```
+
+```{r}
+pop_data_stats <- read.csv("pop_worldometer_data.csv")
+
+glimpse(pop_data_stats)
+
+world_pop <- read.csv("population_total_long.csv")
+
+glimpse(world_pop)
+head(world_pop)
+
+```
+
+The above is 1960 and our data is from 1990-2017 
+
+
+
