@@ -168,7 +168,7 @@ df_17
 
 #Graph selected countries 
 #Is there a way to color by low and high and combine the two graphs below?
-<<<<<<< HEAD
+# HEAD
 #I removed combo_07 so this might not work... 
 
 #combo_07 %>% 
@@ -178,7 +178,7 @@ df_17
 #combo_07 %>% 
   #ggplot(aes(x = country, y = average_death_07_high)) + 
   #geom_point()
-=======
+# 
 #combo_07 %>% 
 #  ggplot() + 
 #  geom_col(mapping = aes(x = country, y = average_death_07_low, fill = country))+
@@ -209,7 +209,7 @@ ggplot(df_07)+
              ggtitle("Average total deaths in low-population countries")+
   coord_flip()
   
->>>>>>> f55e1c84fceb2d108c13d56423a26347f3c769e6
+#f55e1c84fceb2d108c13d56423a26347f3c769e6
 ```
 
 ## Which type of air pollution has the greatest number of deaths (indoor, outdoor, particulate, or outdoor ozone)?
@@ -288,17 +288,18 @@ deaths_df %>%
   ylab("Deaths per 100,000")
 
 #ozone deaths
-deaths_df %>% 
+p2 <- deaths_df %>% 
     filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
                           'Israel', 'Tonga','United States', 'Brazil', 
                           'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
   group_by(country, year, ozone_deaths) %>% 
   ggplot()+
-  geom_point(aes(year, ozone_deaths, color = country))+
+  geom_line(aes(year, ozone_deaths, color = country))+
   ggtitle("Ozone deaths throughout the years in sample countries")+
+  scale_y_log10() + 
   xlab("Year")+
-  ylab("Deaths per 100,000")
-
+  ylab("Deaths per 100,000") 
+ggplotly(p2)
   
   
 #Sort descending to see which country had the highest of each...(not sure if this is right)
@@ -308,6 +309,10 @@ deaths_df %>%
   select(indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths)) %>% 
   arrange(desc(avg_indoor), desc(avg_outdoor), desc(avg_ozone))
+
+library(plotly)
+p <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
+ggplotly(p)
 ```
 
 ## Which year had the worst air pollution (average the three diff types)?
@@ -319,7 +324,7 @@ deaths_df %>%
   arrange(desc(avg_indoor)) %>% 
   arrange(desc(avg_outdoor)) %>% 
   arrange(desc(avg_ozone))
-````
+```
 
 ## Which year had the worst indoor? Outdoor particulate? Outdoor ozone?
 
@@ -356,14 +361,14 @@ deaths_df %>%
 #Probably need to fix the above to answer this one 
 
 
-````
+```
 
 # Notes from first meeting 
 
 ## Hone in to only one year. Find data that is only population, continent data. Choose a couple countries/continents to work on 
 
 ## Look at industrialized vs non-industrialized countries 
->>>>>>> a099fd8818f069a204f274675f043d2f94067c4a
+#>>>>>>> a099fd8818f069a204f274675f043d2f94067c4a
 
 
 
