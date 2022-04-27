@@ -1,0 +1,75 @@
+---
+title: "rough outline"
+output: slidy_presentation
+date: '2022-04-25'
+---
+
+# Introduction 
+* Air pollution can be detrimental to both our health and the climate
+  + Pollutants of major public health concern include carbon monoxide, ozone, nitrogen oxide, and sulfur oxide
+  + Outdoor and indoor air pollution cause respiratory and other diseases. 
+  + Air pollution kills about 7 million people worldwide every year 
+
+* We want to look at death rates of air pollution world wide
+
+* Why?
+  + Hopefully this information can showcase the importance of air pollution and that we should be more mindful about our planet
+  
+* Overview
+  + We will see how different air pollution types affect the population 
+  + See if countries have implemented better techniques to reduce air pollution
+
+# Packages Required 
+
+```{r, include=FALSE}
+#This will allow us to filter through our data 
+library(tidyverse)
+library(dplyr)
+#This will help us plot figures to showcase our findings
+library(ggplot2)
+```
+
+# Data Preparation 
+The data we will be looking at: 
+
+1. **Deaths due to Air Pollution**
+[https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017]
+
+* Author: Akshat Giri
+* This data consists the deaths due to air pollution from 1990-2017 around the world
+* The dataset was recently updated 2 years ago
+* The author wanted to gain more awareness about air pollution and forecast the future 
+
+2. **World Population(pending)**
+
+First let's import the Deaths by Air Pollution data.
+```{r}
+deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
+```
+
+We are going to rename a few of the columns and view the first 6 rows of the data
+```{r}
+colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
+
+head(deaths_df)
+```
+
+Variables that interest us here include:
+* country
+* total_deaths
+* indoor_deaths
+* outdoor_deaths
+* ozone_deaths 
+
+Now, we are going to import the World Population data 
+```{r}
+world_pop <- read.csv("population_total_long.csv")
+```
+
+Let's view the first 6 rows of the data
+```{r}
+head(world_pop)
+```
+# Exploratory Data Analysis 
+
+# Summary 

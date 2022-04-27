@@ -26,7 +26,7 @@ glimpse(deaths_df)
 
 ## Which country has the greatest number of deaths? The least? (dependent on population)
 
-```{r}
+```{r, include=FALSE}
 # Want the range 2007-2017 
 # took this out c(2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
 
@@ -66,12 +66,15 @@ glimpse(deaths_df)
 
 
 ```
-
-```{r}
+# Separation by Population
+```{r, echo=FALSE}
 #SCRATCH WORK ABOVE 
 
 #Not sure if we want to use the selected few countries we looked at earlier?
 #Or if we wanted to use this as a overview of the data
+library(knitr)
+#install.packages('kableExtra')
+library(kableExtra)
 
 #separation by high vs low population among continents 
 death_07_high <- deaths_df %>% 
@@ -79,6 +82,7 @@ death_07_high <- deaths_df %>%
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_07_high = mean(total_deaths))
+#death_07_high
 
 
 death_07_low<- deaths_df %>% 
@@ -86,11 +90,14 @@ death_07_low<- deaths_df %>%
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_07_low = mean(total_deaths))
+#death_07_low
 
-#Combo table 2007
-combo_07<- death_07_high %>% 
-  mutate(death_07_low)
-combo_07
+#Side by side table 
+#kable(list(death_07_high, death_07_low))
+kable(death_07_high) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(death_07_low) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
 
 #dataframe for 2007 high vs low - pop countries
 df_07<- data.frame(death_07_high, death_07_low)
@@ -106,18 +113,21 @@ death_12_high <- deaths_df %>%
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_12_high = mean(total_deaths))
-
+#death_12_high
 
 death_12_low<- deaths_df %>% 
   filter(year == 2012, country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_12_low = mean(total_deaths))
+#death_12_low
 
 #Combo table 2012
-combo_12<- death_12_high %>% 
-  mutate(death_12_low)
-combo_12
+#kable(list(death_12_high, death_12_low))
+kable(death_12_high) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(death_12_low) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
 
 #Data frame for 2012
 df_12<- data.frame(death_12_high, death_12_low)
@@ -132,19 +142,21 @@ death_17_high <- deaths_df %>%
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_17_high = mean(total_deaths))
-
+#death_17_high
 
 death_17_low<- deaths_df %>% 
   filter(year == 2017, country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_17_low = mean(total_deaths))
-
+#death_17_low
 
 #Combo table 2017
-combo_17<- death_17_high %>% 
-  mutate(death_17_low)
-combo_17
+#kable(list(death_17_high, death_17_low))
+kable(death_17_high) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(death_17_low) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
 
 #Data frame for 2017
 df_17<- data.frame(death_17_high, death_17_low)
@@ -156,6 +168,17 @@ df_17
 
 #Graph selected countries 
 #Is there a way to color by low and high and combine the two graphs below?
+<<<<<<< HEAD
+#I removed combo_07 so this might not work... 
+
+#combo_07 %>% 
+  #ggplot(aes(x = country, y = average_death_07_low)) + 
+  #geom_point()
+
+#combo_07 %>% 
+  #ggplot(aes(x = country, y = average_death_07_high)) + 
+  #geom_point()
+=======
 #combo_07 %>% 
 #  ggplot() + 
 #  geom_col(mapping = aes(x = country, y = average_death_07_low, fill = country))+
@@ -186,6 +209,7 @@ ggplot(df_07)+
              ggtitle("Average total deaths in low-population countries")+
   coord_flip()
   
+>>>>>>> f55e1c84fceb2d108c13d56423a26347f3c769e6
 ```
 
 ## Which type of air pollution has the greatest number of deaths (indoor, outdoor, particulate, or outdoor ozone)?
