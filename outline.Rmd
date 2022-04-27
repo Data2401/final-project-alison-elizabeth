@@ -157,6 +157,23 @@ kable(lp_countries_population) %>%
 ```
 
 
+#Join the data sets so we can overlay the two graph or do a stacked barchart?
+
+- `full_join(x, y, by = )`:return all rows and all columns from both x and y. Where there are not matching values, returns NA for the one missing.
+- full join deaths_df and world_pop2
+
+```{r}
+joined_df <- full_join(deaths_df, world_pop2, by = c("country" = "Country.Name"))
+glimpse(joined_df)
+
+
+```
+```{r}
+ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
+  geom_bar(position="stack", stat="identity")
+
+```
+
 
 
 # Exploratory Data Analysis 
