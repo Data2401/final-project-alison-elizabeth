@@ -27,6 +27,11 @@ library(tidyverse)
 library(dplyr)
 #This will help us plot figures to showcase our findings
 library(ggplot2)
+#This will help us organize and display our data as necessary 
+library(knitr)
+library(kableExtra)
+#This expands our plot uses 
+library(plotly)
 ```
 
 # Data Preparation 
@@ -67,9 +72,110 @@ world_pop <- read.csv("population_total_long.csv")
 ```
 
 Let's view the first 6 rows of the data
+This dataset covers more than we need, and so we can trim it to the years we need.
 ```{r}
-head(world_pop)
+world_pop2 <- world_pop %>% filter(Year >= 1990 & Year <= 2017)
+glimpse(world_pop2)
+
 ```
+After selecting our desired years, we've cut the population data set nearly in half.
+
+To get a general idea of the data, let's make some plots to see what's happening.
+
+```{r}
+p <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
+ggplotly(p)
+```
+
+This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
+
+```{r}
+#Mean total deaths from 1990-2017 of high-population countries
+deaths_highpop_countries <- deaths_df %>% 
+  filter(country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_high = mean(total_deaths))
+
+#deaths_highpop_countries
+
+
+#Mean total deaths from 1990-2017 of high-population countries
+deaths_lowpop_countries<- deaths_df %>% 
+  filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_low = mean(total_deaths))
+
+#death_lowpop_countries
+kable(list(deaths_highpop_countries, deaths_lowpop_countries))
+kable(deaths_highpop_countries) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(deaths_lowpop_countries) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
+
+ggplot(deaths_highpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_high))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in high-population countries")+
+  coord_flip()
+
+ggplot(deaths_lowpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_low))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in low-population countries")+
+  coord_flip()
+
+```
+This shows us the deaths due to pollution, but what about the average population of those countries at that time? 
+
+```{r}
+hp_countries_population <- world_pop2 %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+#hp_countries_population
+
+lp_countries_population <- world_pop2 %>% 
+  filter(Country.Name %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+#lp_countries_population
+
+kable(list(hp_countries_population, lp_countries_population))
+kable(hp_countries_population) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(lp_countries_population) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
+
+```
+
+
+#Join the data sets so we can overlay the two graph or do a stacked barchart?
+
+- `full_join(x, y, by = )`:return all rows and all columns from both x and y. Where there are not matching values, returns NA for the one missing.
+- full join deaths_df and world_pop2
+
+```{r}
+joined_df <- full_join(deaths_df, world_pop2, by = c("country" = "Country.Name"))
+glimpse(joined_df)
+
+
+```
+```{r}
+ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
+  geom_bar(position="stack", stat="identity")
+
+```
+
+
+
 # Exploratory Data Analysis 
 
 # Summary 

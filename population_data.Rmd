@@ -18,7 +18,24 @@ glimpse(pop_data_stats)
 world_pop <- read.csv("population_total_long.csv")
 
 glimpse(world_pop)
+<<<<<<< HEAD
+
+high_pop_countries <- world_pop %>% 
+  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  group_by(Year)
+
+high_pop_countries
+
+
+low_pop_countries <- world_pop %>% 
+  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia'))%>% 
+  group_by(Year)
+
+low_pop_countries
+
+=======
 head(world_pop)
+>>>>>>> fef7943c5075056434f6a09cf12a2358782370a8
 
 ```
 
