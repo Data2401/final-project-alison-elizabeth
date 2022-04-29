@@ -163,16 +163,10 @@ kable(lp_countries_population) %>%
 - full join deaths_df and world_pop2
 
 ```{r}
-joined_df <- full_join(deaths_df, world_pop2, by = c("country" = "Country.Name"))
-glimpse(joined_df)
-
 
 ```
-```{r}
-ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
-  geom_bar(position="stack", stat="identity")
 
-```
+
 
 
 

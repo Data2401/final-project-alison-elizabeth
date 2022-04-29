@@ -68,6 +68,9 @@ country_deaths <- deaths_df %>%
 #head(joined_country_pop, 15)
 
 joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
+
+#ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
+#  geom_bar(position="stack", stat="identity")
 ```
 
 
