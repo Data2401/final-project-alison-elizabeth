@@ -21,14 +21,14 @@ glimpse(world_pop)
 
 
 high_pop_countries <- world_pop %>% 
-  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
 
 high_pop_countries
 
 
 low_pop_countries <- world_pop %>% 
-  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia'))%>% 
+  filter(Year > 1999 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
 
 low_pop_countries
@@ -69,8 +69,12 @@ country_deaths <- deaths_df %>%
 
 joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
 
+
 #ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
 #  geom_bar(position="stack", stat="identity")
+
+#pops_by_country$Country.Name[[Indicator.Name("Population, total" >= 130000000)]
+#rownames(table_name)[rownames(table_name) == "old label"] = "new label"
 ```
 
 
