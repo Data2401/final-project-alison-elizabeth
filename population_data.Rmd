@@ -56,6 +56,19 @@ edit <- selected_pop %>%
 
 edit
 ```
+```{r}
+country_deaths <- deaths_df %>% 
+    filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
+                          'Israel', 'Tonga','United States', 'Brazil', 
+                          'Ethiopia', 'Russia', 'China', 'Australia'))
+
+
+#joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
+#glimpse(joined_country_pop)
+#head(joined_country_pop, 15)
+
+joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
+```
 
 
 
