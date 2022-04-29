@@ -92,7 +92,7 @@ This is a mess, and so we chose two countries from each continent (a high-popula
 ```{r}
 #Mean total deaths from 1990-2017 of high-population countries
 deaths_highpop_countries <- deaths_df %>% 
-  filter(country %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_high = mean(total_deaths))
@@ -102,7 +102,7 @@ deaths_highpop_countries <- deaths_df %>%
 
 #Mean total deaths from 1990-2017 of high-population countries
 deaths_lowpop_countries<- deaths_df %>% 
-  filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_low = mean(total_deaths))

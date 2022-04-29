@@ -334,28 +334,33 @@ deaths_df %>%
 ##Pull in more data on populations for the selected countries
 
 ##Industrial and non industrial zones, what countries have coal plants? oil plants? 
+```{r}
+
+```
 
 
-##Years to focus on: 2007 to 2017, 
+##Years to focus on: 1990 to 2017, 
+
+#start with high population country and to choose the low population, choose a country that is 10% of that high population and choose a country closest (2020 population)
 
 ##Countries:
 #US - north america - high pop
 #Canada - north america - low pop
 
 #Brazil - S america - high pop
-#Argentina - S America - low pop
+#Chile - S America - low pop
 
-#Ethiopia - Africa - high pop
-#Seychellas - Africa - low pop
+#Nigeria - Africa - high pop
+#Malawi - Africa - low pop
 
-#Russia - Europe - high pop
-#Romania - Europe - low pop
+#Germany - Europe - high pop
+#Serbia - Europe - low pop
 
-#China - Asia - high pop 
-#Israel - Asia - low pop
+#China - Pakistan - high pop 
+#Israel - Sri Lanka - low pop
 
 #Australis - Oceania - high pop
-#Tonga - Oceania - low pop
+#New Zealand - Oceania - low pop
 =======
 ```{r}
 #Probably need to fix the above to answer this one 
