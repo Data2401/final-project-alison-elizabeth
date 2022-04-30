@@ -4,7 +4,18 @@ author: "Elizabeth Bekele, Alison Cheek"
 output: slidy_presentation
 date: '2022-05-03'
 ---
-
+```{r, include=FALSE}
+#This will allow us to filter through our data 
+library(tidyverse)
+library(dplyr)
+#This will help us plot figures to showcase our findings
+library(ggplot2)
+#This will help us organize and display our data as necessary 
+library(knitr)
+library(kableExtra)
+#This expands our plot uses 
+library(plotly)
+```
 # Introduction 
 * Air pollution can be detrimental to both our health and the climate
   + Outdoor and indoor air pollution cause chronic pain, respiratory diseases, shortened lifespan
@@ -20,45 +31,15 @@ date: '2022-05-03'
   
 # Data Details 
 *Air pollution deaths 
-  +Kaggle: https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017 
+  +Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
   + Author: Akshat Giri
   + Last update: 2 years ago
   
-
-
-```{r, include=FALSE}
-#This will allow us to filter through our data 
-library(tidyverse)
-library(dplyr)
-#This will help us plot figures to showcase our findings
-library(ggplot2)
-#This will help us organize and display our data as necessary 
-library(knitr)
-library(kableExtra)
-#This expands our plot uses 
-library(plotly)
-#Adjusting numbers 
-format(4.470862e-01, scientific = F, digits = 3)
-```
-
-# Data Preparation 
-The data we will be looking at: 
-
-1. **Deaths due to Air Pollution**
-[https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017]
-
-* Author: Akshat Giri
-* This data consists the deaths due to air pollution from 1990-2017 around the world
-* The dataset was recently updated 2 years ago
-* The author wanted to gain more awareness about air pollution and forecast the future 
-
-2. **World Population(pending)**
-
-First let's import the Deaths by Air Pollution data.
+Import the Deaths by Air Pollution data
 ```{r}
 deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
 ```
-
+  
 We are going to rename a few of the columns and view the first 6 rows of the data
 ```{r}
 colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
@@ -76,20 +57,32 @@ Variables that interest us here include:
 Now, we are going to import the World Population data 
 ```{r}
 world_pop <- read.csv("population_total_long.csv")
-glimpse(world_pop)
+head(world_pop)
+```
+To get a general idea of the data, let's make some plots to see what's happening.
+
+```{r}
+d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
+ggplotly(d)
 ```
 
-Let's split the data into high and low population based on country.
-- Low population = high population * .10
+This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
+
+# Exploratory Data Analysis 
+
+Let's split the data into high and low population based on country
+
+  +Low population = high population * .10
+  
 ```{r}
-#Let's compare the first decade 1996-2006 with second decade 2007-2017 
+#selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
   filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
 
 high_pop_countries
 
-
+#selecting low-population countries from the world population data frame 
 low_pop_countries <- world_pop %>% 
   filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
@@ -97,19 +90,8 @@ low_pop_countries <- world_pop %>%
 low_pop_countries
 
 ```
-After selecting our desired years, we've cut the population data set nearly in half.
 
-To get a general idea of the data, let's make some plots to see what's happening.
 
-```{r}
-d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
-ggplotly(d)
-
-#p <- ggplot(world_pop, aes(x = Country.Name, y = Year,  text = paste0(Country.Name, ", ", Year) )) + geom_density()
-#ggplotly(p)
-```
-
-This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
 
 ```{r}
 #Mean total deaths from 1990-2017 of high-population countries
@@ -201,10 +183,5 @@ ggplot(lp_countries_population)+
 
 ```
 
-
-
-
-
-# Exploratory Data Analysis 
 
 # Summary 
