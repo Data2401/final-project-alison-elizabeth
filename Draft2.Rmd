@@ -9,6 +9,7 @@ date: '2022-04-18'
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(plotly)
 ```
 
 # Add in Data 
@@ -28,42 +29,66 @@ glimpse(deaths_df)
 
 ```{r, include=FALSE}
 # Want the range 2007-2017 
-# took this out c(2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017)
-
 #Maybe try increments...?
-#When looking at it you can see a decrease among the three years 
-#death_07<- deaths_df %>% 
-  #group_by(country) %>% 
-  #filter(year == 2007) %>% 
-  #select(total_deaths) %>% 
-  #summarize(average_death_07 = mean(total_deaths))
 
-#death_12<- deaths_df %>% 
-  #group_by(country) %>% 
-  #filter(year == 2012) %>% 
-  #select(total_deaths) %>% 
-  #summarize(average_death_12 = mean(total_deaths))
+# Look at the trend of deaths within the last decade from low and high populated countries
+death_07_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Populated_Deaths_07 = mean(total_deaths))
+death_07_high
 
-#death_17<- deaths_df %>% 
-  #group_by(country) %>% 
-  #filter(year == 2017) %>% 
-  #select(total_deaths) %>% 
-  #summarize(average_death_17 = mean(total_deaths))
+death_07_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Populated_Deaths_07 = mean(total_deaths))
+death_07_low
 
-#try to have one cohesive table so it's easier to visualize 
-#combo <- death_07 %>% 
-  #mutate(death_12) %>% 
-  #mutate(death_17)
+death_12_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Populated_Deaths_12 = mean(total_deaths))
+death_12_high
 
-#combo
+death_12_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Populated_Deaths_12 = mean(total_deaths))
+death_12_low
 
-#Then graph it 
-#Just realized there's 200+ countries....the x-axis looks terrible 
-#Would be nice to color by continent but then that would mean going through each country
-#ggplot(death_07, aes(x= country, y=average_death_07)) +
-  #geom_point() +
-  #theme(axis.text.x = element_text(angle = 15)) #yah..no rotation made it worse
+death_17_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Populated_Deaths_17 = mean(total_deaths))
+death_17_high
 
+death_17_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Populated_Deaths_17 = mean(total_deaths))
+death_17_low
+
+#cohesive table so it's easier to visualize 
+#Low Population Table 2007-2017
+all_low <- death_07_low %>% 
+  mutate(death_12_low) %>% 
+  mutate(death_17_low)
+all_low
+
+#High Population Table 2007-2017
+all_high <- death_07_high %>% 
+  mutate(death_12_high) %>% 
+  mutate(death_17_high)
+all_high
+
+#Then graph it...but how?? 
+#Scatter plot (color by country, info pop up like the average death and by year)
 
 ```
 # Separation by Population
