@@ -148,7 +148,7 @@ This shows us the deaths due to pollution, but what about the average population
 
 ```{r}
 hp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
@@ -156,7 +156,7 @@ hp_countries_population <- world_pop %>%
 #hp_countries_population
 
 lp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
@@ -169,6 +169,19 @@ kable(hp_countries_population) %>%
 kable(lp_countries_population) %>% 
   kable_styling(full_width = FALSE, position = 'left')
 
+ggplot(hp_countries_population)+
+  geom_col(mapping = aes(x=Country.Name, y=average_population))+
+             xlab("Country")+
+             ylab("Average Population")+
+             ggtitle("Average high-population countries")+
+  coord_flip()
+
+ggplot(lp_countries_population)+
+  geom_col(mapping = aes(x=Country.Name, y=average_population))+
+             xlab("Country")+
+             ylab("Average Population")+
+             ggtitle("Average low-population countries")+
+  coord_flip()
 ```
 
 
