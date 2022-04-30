@@ -1,5 +1,5 @@
 ---
-title: "Global deaths due to air ollution"
+title: "Global Deaths Due to Air Pollution"
 author: "Elizabeth Bekele, Alison Cheek"
 output: slidy_presentation
 date: '2022-05-03'
@@ -30,36 +30,31 @@ library(plotly)
 # Packages Required 
   
 # Data Details 
-*Air pollution deaths 
-  +Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
+* Deaths from air pollution:
+  + Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
   + Author: Akshat Giri
   + Last update: 2 years ago
   
-Import the Deaths by Air Pollution data
+Import the deaths-due-to-air-pollution data
 ```{r}
 deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
 ```
   
-We are going to rename a few of the columns and view the first 6 rows of the data
+We are going to rename a few of the columns and glimpse the data
 ```{r}
 colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
 
-head(deaths_df)
+glimpse(deaths_df)
 ```
 
-Variables that interest us here include:
-* country
-* total_deaths
-* indoor_deaths
-* outdoor_deaths
-* ozone_deaths 
+Variables that interest us here include: country, total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths 
 
-Now, we are going to import the World Population data 
+Now, we are going to import the world-popultaion data and glimpse
 ```{r}
 world_pop <- read.csv("population_total_long.csv")
-head(world_pop)
+glimpse(world_pop)
 ```
-To get a general idea of the data, let's make some plots to see what's happening.
+To get a general idea of 'deaths-dataframe' we made, let's make a plots to see what's happening. This is a plot of indoor x outdoor deaths around the world by country.
 
 ```{r}
 d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
@@ -70,7 +65,7 @@ This is a mess, and so we chose two countries from each continent (a high-popula
 
 # Exploratory Data Analysis 
 
-Let's split the data into high and low population based on country
+First, we split the data into high and low population based on country
 
   +Low population = high population * .10
   
