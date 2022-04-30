@@ -32,6 +32,8 @@ library(knitr)
 library(kableExtra)
 #This expands our plot uses 
 library(plotly)
+#Adjusting numbers 
+format(4.470862e-01, scientific = F, digits = 3)
 ```
 
 # Data Preparation 
