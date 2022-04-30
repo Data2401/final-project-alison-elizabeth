@@ -69,13 +69,25 @@ Variables that interest us here include:
 Now, we are going to import the World Population data 
 ```{r}
 world_pop <- read.csv("population_total_long.csv")
+glimpse(world_pop)
 ```
 
-Let's view the first 6 rows of the data
-This dataset covers more than we need, and so we can trim it to the years we need.
+Let's split the data into high and low population based on country.
+- Low population = high population * .10
 ```{r}
-world_pop2 <- world_pop %>% filter(Year >= 1990 & Year <= 2017)
-glimpse(world_pop2)
+#Let's compare the first decade 1996-2006 with second decade 2007-2017 
+high_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(Year)
+
+high_pop_countries
+
+
+low_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  group_by(Year)
+
+low_pop_countries
 
 ```
 After selecting our desired years, we've cut the population data set nearly in half.
@@ -83,8 +95,11 @@ After selecting our desired years, we've cut the population data set nearly in h
 To get a general idea of the data, let's make some plots to see what's happening.
 
 ```{r}
-p <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
-ggplotly(p)
+d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
+ggplotly(d)
+
+#p <- ggplot(world_pop, aes(x = Country.Name, y = Year,  text = paste0(Country.Name, ", ", Year) )) + geom_density()
+#ggplotly(p)
 ```
 
 This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
@@ -132,7 +147,7 @@ ggplot(deaths_lowpop_countries)+
 This shows us the deaths due to pollution, but what about the average population of those countries at that time? 
 
 ```{r}
-hp_countries_population <- world_pop2 %>% 
+hp_countries_population <- world_pop %>% 
   filter(Country.Name %in% c('United States', 'Brazil', 'Ethiopia', 'Russia', 'China', 'Australia')) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
@@ -140,7 +155,7 @@ hp_countries_population <- world_pop2 %>%
 
 #hp_countries_population
 
-lp_countries_population <- world_pop2 %>% 
+lp_countries_population <- world_pop %>% 
   filter(Country.Name %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 'Israel', 'Tonga')) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 

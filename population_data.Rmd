@@ -19,22 +19,23 @@ world_pop <- read.csv("population_total_long.csv")
 
 glimpse(world_pop)
 
-
+#Let's compare the first decade 1996-2006 with second decade 2007-2017 
 high_pop_countries <- world_pop %>% 
-  filter(Year > 1999 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
 
 high_pop_countries
 
 
 low_pop_countries <- world_pop %>% 
-  filter(Year > 1999 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
 
 low_pop_countries
 
 
-head(world_pop)
+#General overview of data 
+head(world_pop, 12)
 
 ```
 
