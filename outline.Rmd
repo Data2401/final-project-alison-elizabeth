@@ -1,25 +1,30 @@
 ---
-title: "rough outline"
+title: "Global deaths due to air ollution"
+author: "Elizabeth Bekele, Alison Cheek"
 output: slidy_presentation
-date: '2022-04-25'
+date: '2022-05-03'
 ---
 
 # Introduction 
 * Air pollution can be detrimental to both our health and the climate
-  + Pollutants of major public health concern include carbon monoxide, ozone, nitrogen oxide, and sulfur oxide
-  + Outdoor and indoor air pollution cause respiratory and other diseases. 
+  + Outdoor and indoor air pollution cause chronic pain, respiratory diseases, shortened lifespan
   + Air pollution kills about 7 million people worldwide every year 
-
-* We want to look at death rates of air pollution world wide
-
-* Why?
   + Hopefully this information can showcase the importance of air pollution and that we should be more mindful about our planet
   
 * Overview
   + We will see how different air pollution types affect the population 
-  + See if countries have implemented better techniques to reduce air pollution
-
+  + compare past and present population numbers
+  + determine which air pollutant type has the highest associated death rate
+  
 # Packages Required 
+  
+# Data Details 
+*Air pollution deaths 
+  +Kaggle: https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017 
+  + Author: Akshat Giri
+  + Last update: 2 years ago
+  
+
 
 ```{r, include=FALSE}
 #This will allow us to filter through our data 
