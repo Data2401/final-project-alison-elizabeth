@@ -344,7 +344,7 @@ death_17_high<- deaths_df %>%
 
 death_17_low<- deaths_df %>% 
   group_by(country) %>% 
-  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  filter(year == 2017, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
   select(total_deaths) %>% 
   summarize(Low_Deaths_17 = mean(total_deaths))
 
@@ -366,36 +366,192 @@ kable(list(all_low_second))
 ***
 
 Let's graph the previous tables!
+
+The first decade.
 ```{r, echo=FALSE}
-#High Population Deaths 2007 and 20012
-p_high <- all_high_second %>%
+#High Population Deaths 1996-2006 
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= High_Deaths_96, y= High_Deaths_01, color= High_Deaths_06)) +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths", y="2001 Deaths")
+
+ggplotly(interact_high_first)
+
+#Low Population Deaths 1996-2006
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= Low_Deaths_96, y= Low_Deaths_01, color= Low_Deaths_06)) +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_low_first<- p_low_first + labs(title="Low Populated Countries", x="1996 Deaths", y="2001 Deaths")
+
+ggplotly(interact_low_first)
+```
+
+*** 
+
+This shows the second decade.
+```{r, echo=FALSE}
+#High Population Deaths 2007-2017
+p_high_second <- all_high_second %>%
   group_by(country) %>% 
   ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= High_Deaths_17)) +
   geom_point() +
   facet_wrap(~country)
 
-interact_high<- p_high + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
+interact_high_second<- p_high_second + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
-ggplotly(interact_high)
+ggplotly(interact_high_second)
 
-#Low Population Deaths 2007 and 2012
-p_low <- all_low_second %>%
+#Low Population Deaths 2007-2017
+p_low_second <- all_low_second %>%
   group_by(country) %>% 
   ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= Low_Deaths_17)) +
   geom_point() +
   facet_wrap(~country)
 
-interact_low<- p_low + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
+interact_low_second<- p_low_second + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
-ggplotly(interact_low)
+ggplotly(interact_low_second)
 
 ```
 
 ***
 
-## Which year had the worst indoor? Outdoor particulate? Outdoor ozone? 
-# Which is worse - outdoor or indoor pollution?
+> Which year had the worst indoor? Outdoor particulate? Outdoor ozone? 
 
+Indoor Deaths
+```{r, echo=FALSE}
+#Indoor 1996-2017
+indoor_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("High Populated Indoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_high)
+
+indoor_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("Low Populated Indoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_low)
+
+#Pakistan and Malawi were both mainly affected in 1996
+indoor_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("Greatest Indoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_top)
+```
+
+***
+
+Outdoor Deaths
+```{r, echo= FALSE}
+#Outdoor Particulate 1996-2017
+outdoor_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("High Populated Outdoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_high)
+
+outdoor_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("Low Populated Outdoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_low)
+
+#Serbia and Pakistan were the top countries affected. 
+#2011 Pakistan had the greatest amount of Outdoor Deaths
+outdoor_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Serbia')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("Greatest Outdoor Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_top)
+```
+
+***
+Ozone Deaths 
+```{r, echo=FALSE}
+#Outdoor ozone 1996-2017
+ozone_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("High Populated Ozone Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_high)
+
+ozone_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("Low Populated Ozone Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_low)
+
+#Malawi and Pakistan were the top countries affected 
+#1997 had the greatest amount of ozone death in Pakistan
+ozone_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("Greatest Ozone Death 1996-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_top)
+```
+
+
+# Which is worse? 
+> outdoor or indoor pollution?
+```{r}
+
+
+
+
+```
+
+
+# Reminder: Include this in the beginning 
 First, we split the data into high and low population based on country
 
 Low population = high population * .10
@@ -418,6 +574,7 @@ low_pop_countries
 ```
 
 
+# Include Earlier to See who's been affected 
 
 ```{r}
 #Mean total deaths from 1996-2017 of high-population countries
