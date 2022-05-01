@@ -143,7 +143,8 @@ head(joined_low)
 
 ```
 
-# Which country has the highest death count?
+# Death Count
+> Which country has the highest death count?
 
 Let's make a table depicting the high and low populated countries and their respected death count due to pollution.
 
@@ -167,27 +168,35 @@ kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
 ```
 
+***
 
 Here's a graph to clearly visualize the previous table
 ```{r}
 #Plot High Population Deaths (average)
-ggplot(deaths_highpop_countries)+
+h<- ggplot(deaths_highpop_countries)+
   geom_col(mapping = aes(x=country, y=average_death_high))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average total deaths in high-population countries")+
   coord_flip()
 
+ggplotly(h)
+
 #Plot of Low Population Deaths (average)
-ggplot(deaths_lowpop_countries)+
+l <- ggplot(deaths_lowpop_countries)+
   geom_col(mapping = aes(x=country, y=average_death_low))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average total deaths in low-population countries")+
   coord_flip()
+
+ggplotly(l)
 ```
 
+*** 
+
 # Which type of pollution has the greatest number of deaths?
+
 # Pollution Over Time 
 ## Which year had the worst pollution?
 ## Which year had the worst indoor? Outdoor particulate? Outdoor ozone? 
