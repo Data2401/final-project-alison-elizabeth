@@ -92,6 +92,28 @@ ggplotly(d)
 
 This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
 
+***
+We selected a high population from each continent and used the formula below to determine the low population.
+
+Low population = high population * .10
+  
+```{r, echo=FALSE}
+#selecting high-population countries from the world population data frame 
+high_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(Year)
+
+glimpse(high_pop_countries)
+
+#selecting low-population countries from the world population data frame 
+low_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  group_by(Year)
+
+glimpse(low_pop_countries)
+```
+
+
 # Combine Data Sets
 
 First let's look at a table of the high and low populated countries using the world population data set.
@@ -196,6 +218,62 @@ ggplotly(l)
 ```
 
 *** 
+So we've looked at the deaths due to pollution, but what percentage of the population was affected?
+
+```{r, echo=FALSE, message=FALSE}
+hp_countries_population <- world_pop %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1996) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+lp_countries_population <- world_pop %>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1996) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+#Population Average Table
+kable(list(hp_countries_population, lp_countries_population))
+
+#Graph of Population Average
+ggplot(hp_countries_population)+
+  geom_col(mapping = aes(x=Country.Name, y=average_population))+
+             xlab("Country")+
+             ylab("Average Population")+
+             ggtitle("Average high-population countries")+
+  coord_flip()
+
+ggplot(lp_countries_population)+
+  geom_col(mapping = aes(x=Country.Name, y=average_population))+
+             xlab("Country")+
+             ylab("Average Population")+
+             ggtitle("Average low-population countries")+
+  coord_flip()
+
+#Percentage of those affected 
+affected_high<- joined_high %>% 
+  mutate(percent_high = total_deaths/Count)
+
+percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
+  geom_point() +
+  labs(title = "Percentage of High Populated Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/Count)")
+ggplotly(percent_high)
+
+affected_low <- joined_low %>% 
+  mutate(percent_low = total_deaths/Count)
+
+percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
+  geom_point() +
+  labs(title = "Percentage of Low Populated Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/Count)")
+ggplotly(percent_low)
+```
+
+
 
 # Pollution Types
 > Which type of pollution has the greatest number of deaths?
@@ -568,30 +646,7 @@ We cannot conclude which is worse.
   + Outdoor pollution seems to be more detrimental with the exception of two countries in this sample set.
 
 
-# Reminder: Include this in the beginning 
-First, we split the data into high and low population based on country
-
-Low population = high population * .10
-  
-```{r, echo=FALSE}
-#selecting high-population countries from the world population data frame 
-high_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
-  group_by(Year)
-
-high_pop_countries
-
-#selecting low-population countries from the world population data frame 
-low_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
-  group_by(Year)
-
-low_pop_countries
-
-```
-
-
-# Include Earlier to See who's been affected 
+# We have this included already  
 
 ```{r}
 #Mean total deaths from 1996-2017 of high-population countries
@@ -626,60 +681,8 @@ ggplot(deaths_lowpop_countries)+
   coord_flip()
 ```
 
-This shows us the deaths due to pollution, but what about the average population of those countries at that time? 
-
-```{r}
-hp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1996) %>% 
-  group_by(Country.Name) %>% 
-  select(Count) %>% 
-  summarize(average_population = mean(Count))
-
-lp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1996) %>% 
-  group_by(Country.Name) %>% 
-  select(Count) %>% 
-  summarize(average_population = mean(Count))
-
-#Population Average Table
-kable(list(hp_countries_population, lp_countries_population))
-
-#Graph of Population Average
-ggplot(hp_countries_population)+
-  geom_col(mapping = aes(x=Country.Name, y=average_population))+
-             xlab("Country")+
-             ylab("Average Population")+
-             ggtitle("Average high-population countries")+
-  coord_flip()
-
-ggplot(lp_countries_population)+
-  geom_col(mapping = aes(x=Country.Name, y=average_population))+
-             xlab("Country")+
-             ylab("Average Population")+
-             ggtitle("Average low-population countries")+
-  coord_flip()
-
-#Percentage of those affected 
-affected_high<- joined_high %>% 
-  mutate(percent_high = total_deaths/Count)
-
-percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
-  geom_point() +
-  labs(title = "Percentage of High Populated Countries Affected by Air Pollution") +
-  xlab("Year")+
-  ylab("Percent (total_deaths/Count)")
-ggplotly(percent_high)
-
-affected_low <- joined_low %>% 
-  mutate(percent_low = total_deaths/Count)
-
-percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
-  geom_point() +
-  labs(title = "Percentage of Low Populated Countries Affected by Air Pollution") +
-  xlab("Year")+
-  ylab("Percent (total_deaths/Count)")
-ggplotly(percent_low)
-```
-
-
 # Summary 
+
+
+
+# Sources
