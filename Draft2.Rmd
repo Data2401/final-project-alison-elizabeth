@@ -91,6 +91,18 @@ all_high
 #Scatter plot (color by country, info pop up like the average death and by year)
 
 ```
+
+# Stuff we deleted 
+kable(hp_countries_population) %>% 
+  kable_styling(full_width = FALSE, position = 'float_left')
+kable(lp_countries_population) %>% 
+  kable_styling(full_width = FALSE, position = 'left')
+
+
+
+
+
+
 # Separation by Population
 ```{r, echo=FALSE}
 #SCRATCH WORK ABOVE 

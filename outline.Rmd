@@ -4,18 +4,6 @@ author: "Elizabeth Bekele, Alison Cheek"
 output: slidy_presentation
 date: '2022-05-03'
 ---
-```{r, include=FALSE}
-#This will allow us to filter through our data 
-library(tidyverse)
-library(dplyr)
-#This will help us plot figures to showcase our findings
-library(ggplot2)
-#This will help us organize and display our data as necessary 
-library(knitr)
-library(kableExtra)
-#This expands our plot uses 
-library(plotly)
-```
 # Introduction 
 * Air pollution can be detrimental to both our health and the climate
   + Outdoor and indoor air pollution cause chronic pain, respiratory diseases, shortened lifespan
@@ -28,7 +16,19 @@ library(plotly)
   + determine which air pollutant type has the highest associated death rate
   
 # Packages Required 
-  
+```{r, message=FALSE}
+#This will allow us to filter through our data 
+library(tidyverse)
+library(dplyr)
+#This will help us plot figures to showcase our findings
+library(ggplot2)
+#This will help us organize and display our data as necessary 
+library(knitr)
+library(kableExtra)
+#This expands our plot uses 
+library(plotly)
+```
+
 # Data Details 
 * Deaths from air pollution:
   + Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
@@ -49,25 +49,126 @@ glimpse(deaths_df)
 
 Variables that interest us here include: country, total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths 
 
-Now, we are going to import the world-popultaion data and glimpse
+# Data Continued
+
+Now, let's take a look at the population data.
 ```{r}
 world_pop <- read.csv("population_total_long.csv")
 glimpse(world_pop)
 ```
+
 To get a general idea of 'deaths-dataframe' we made, let's make a plots to see what's happening. This is a plot of indoor x outdoor deaths around the world by country.
 
 ```{r}
-d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point()
+d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point() +
+  ggtitle("Outdoor Deaths vs Indoor Deaths")
 ggplotly(d)
 ```
 
 This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
 
-# Exploratory Data Analysis 
+# Combine Data Sets
+
+First let's look at a table of the high and low populated countries using the world population data set.
+```{r}
+#selecting high-population countries from the world population data frame 
+high_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(Year)
+
+head(high_pop_countries)
+
+#selecting low-population countries from the world population data frame 
+low_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  group_by(Year)
+
+head(low_pop_countries)
+```
+
+Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
+```{r}
+#selecting high-population deaths from death dataframe 
+high_pop_death <- deaths_df %>% 
+  filter(year > 1996 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(year)
+
+head(high_pop_death)
+
+#selecting low-population deaths from death dataframe 
+low_pop_death <- deaths_df %>% 
+  filter(year > 1996 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  group_by(year)
+
+head(low_pop_death)
+
+```
+
+Lastly, we will join the population and and deaths with its respected country.
+```{r}
+#Combined High Population with Pollution Death
+joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
+head(joined_high)
+
+#Combined Low Population with Pollution Death
+joined_low <-right_join(low_pop_death, low_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
+head(joined_low) 
+
+```
+
+# Which country has the highest death count?
+
+Let's make a table depicting the high and low populated countries and their respected death count due to pollution.
+
+```{r}
+#Mean total deaths of high-population countries
+deaths_highpop_countries <- deaths_df %>% 
+  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_high = mean(total_deaths))
+
+#Mean total deaths of high-population countries
+deaths_lowpop_countries<- deaths_df %>% 
+  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_low = mean(total_deaths))
+
+#Side-by-side Table to view deaths 
+kable(list(deaths_highpop_countries, deaths_lowpop_countries))
+
+```
+
+
+Here's a graph to clearly visualize the previous table
+```{r}
+#Plot High Population Deaths (average)
+ggplot(deaths_highpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_high))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in high-population countries")+
+  coord_flip()
+
+#Plot of Low Population Deaths (average)
+ggplot(deaths_lowpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_low))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in low-population countries")+
+  coord_flip()
+```
+
+# Which type of pollution has the greatest number of deaths?
+# Pollution Over Time 
+## Which year had the worst pollution?
+## Which year had the worst indoor? Outdoor particulate? Outdoor ozone? 
+# Which is worse - outdoor or indoor pollution?
 
 First, we split the data into high and low population based on country
 
-  +Low population = high population * .10
+Low population = high population * .10
   
 ```{r}
 #selecting high-population countries from the world population data frame 
@@ -89,15 +190,12 @@ low_pop_countries
 
 
 ```{r}
-#Mean total deaths from 1990-2017 of high-population countries
+#Mean total deaths from 1996-2017 of high-population countries
 deaths_highpop_countries <- deaths_df %>% 
   filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_high = mean(total_deaths))
-
-#deaths_highpop_countries
-
 
 #Mean total deaths from 1990-2017 of high-population countries
 deaths_lowpop_countries<- deaths_df %>% 
@@ -108,10 +206,6 @@ deaths_lowpop_countries<- deaths_df %>%
 
 #death_lowpop_countries
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
-kable(deaths_highpop_countries) %>% 
-  kable_styling(full_width = FALSE, position = 'float_left')
-kable(deaths_lowpop_countries) %>% 
-  kable_styling(full_width = FALSE, position = 'left')
 
 ggplot(deaths_highpop_countries)+
   geom_col(mapping = aes(x=country, y=average_death_high))+
@@ -128,11 +222,12 @@ ggplot(deaths_lowpop_countries)+
   coord_flip()
 
 ```
+
 This shows us the deaths due to pollution, but what about the average population of those countries at that time? 
 
 ```{r}
 hp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1996) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
@@ -140,19 +235,15 @@ hp_countries_population <- world_pop %>%
 #hp_countries_population
 
 lp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1996) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
 
-#lp_countries_population
-
+#Population Average Table
 kable(list(hp_countries_population, lp_countries_population))
-kable(hp_countries_population) %>% 
-  kable_styling(full_width = FALSE, position = 'float_left')
-kable(lp_countries_population) %>% 
-  kable_styling(full_width = FALSE, position = 'left')
 
+#Graph of Population Average
 ggplot(hp_countries_population)+
   geom_col(mapping = aes(x=Country.Name, y=average_population))+
              xlab("Country")+
