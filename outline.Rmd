@@ -38,12 +38,12 @@ options(scipen=999)
   + Last update: 2 years ago
   
 Import the deaths-due-to-air-pollution data
-```{r}
+```{r, echo=FALSE}
 deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
 ```
   
 We are going to rename a few of the columns and glimpse the data
-```{r}
+```{r, echo=FALSE}
 colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
 
 glimpse(deaths_df)
@@ -77,14 +77,14 @@ Variables that interest us here include:
 ***
 
 Now, let's take a look at the population data.
-```{r}
+```{r, echo=FALSE}
 world_pop <- read.csv("population_total_long.csv")
 glimpse(world_pop)
 ```
 
 To get a general idea of 'deaths-dataframe' we made, let's make a plots to see what's happening. This is a plot of indoor x outdoor deaths around the world by country.
 
-```{r}
+```{r, echo=FALSE}
 d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point() +
   ggtitle("Outdoor Deaths vs Indoor Deaths")
 ggplotly(d)
@@ -95,7 +95,7 @@ This is a mess, and so we chose two countries from each continent (a high-popula
 # Combine Data Sets
 
 First let's look at a table of the high and low populated countries using the world population data set.
-```{r}
+```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
   filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
@@ -114,7 +114,7 @@ head(low_pop_countries)
 *** 
 
 Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
-```{r}
+```{r, echo=FALSE}
 #selecting high-population deaths from death dataframe 
 high_pop_death <- deaths_df %>% 
   filter(year > 1996 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
@@ -134,7 +134,7 @@ head(low_pop_death)
 ***
 
 Lastly, we will join the population and and deaths with its respected country.
-```{r}
+```{r, message=FALSE, echo=FALSE}
 #Combined High Population with Pollution Death
 joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
 head(joined_high)
@@ -150,7 +150,7 @@ head(joined_low)
 
 Let's make a table depicting the high and low populated countries and their respected death count due to pollution.
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #Mean total deaths of high-population countries
 deaths_highpop_countries <- deaths_df %>% 
   filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
@@ -173,7 +173,7 @@ kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 ***
 
 Here's a graph to clearly visualize the previous table
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 #Plot High Population Deaths (average)
 h<- ggplot(deaths_highpop_countries)+
   geom_col(mapping = aes(x=country, y=average_death_high))+
@@ -200,7 +200,7 @@ ggplotly(l)
 # Pollution Types
 > Which type of pollution has the greatest number of deaths?
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 #High Population Pollutant Averages
 high_poll <- deaths_df %>% 
   group_by(country) %>% 
@@ -366,12 +366,13 @@ kable(list(all_low_second))
 ***
 
 Let's graph the previous tables!
-```{r}
+```{r, echo=FALSE}
 #High Population Deaths 2007 and 20012
 p_high <- all_high_second %>%
   group_by(country) %>% 
-  ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= country)) +
-  geom_point()
+  ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= High_Deaths_17)) +
+  geom_point() +
+  facet_wrap(~country)
 
 interact_high<- p_high + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
@@ -380,8 +381,9 @@ ggplotly(interact_high)
 #Low Population Deaths 2007 and 2012
 p_low <- all_low_second %>%
   group_by(country) %>% 
-  ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= country)) +
-  geom_point()
+  ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= Low_Deaths_17)) +
+  geom_point() +
+  facet_wrap(~country)
 
 interact_low<- p_low + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
@@ -398,7 +400,7 @@ First, we split the data into high and low population based on country
 
 Low population = high population * .10
   
-```{r}
+```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
   filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
