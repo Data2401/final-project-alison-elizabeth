@@ -251,13 +251,124 @@ ggplotly(l_outdoor)
 ***
 
 # Pollution Over Time 
-> Which year had the worst pollution?
+> Let's look at the previous two decades and compare the death count
+> Has there been a change?
 
-```{r}
+This is the first decade 1996-2006
+```{r, echo=FALSE, message=FALSE}
+# Look at the trend of deaths within the last decade from low and high populated countries
+death_96_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 1996, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_96 = mean(total_deaths))
 
+death_96_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 1996, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_96 = mean(total_deaths))
 
+death_01_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2001, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_01 = mean(total_deaths))
+
+death_01_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2001, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_01 = mean(total_deaths))
+
+death_06_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2006, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_06 = mean(total_deaths))
+
+death_06_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2006, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_06 = mean(total_deaths))
+
+#cohesive table so it's easier to visualize 
+#Low Population Table 2007-2017
+all_low_first <- death_96_low %>% 
+  mutate(death_01_low) %>% 
+  mutate(death_06_low)
+
+#High Population Table 2007-2017
+all_high_first <- death_96_high %>% 
+  mutate(death_01_high) %>% 
+  mutate(death_06_high)
+
+kable(list(all_high_first))
+kable(list(all_low_first))
+```
+***
+
+This is the second decade 2007-2017
+```{r, echo=FALSE, message=FALSE}
+# Look at the trend of deaths within the last decade from low and high populated countries
+death_07_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_07 = mean(total_deaths))
+
+death_07_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_07 = mean(total_deaths))
+
+death_12_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_12 = mean(total_deaths))
+
+death_12_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_12 = mean(total_deaths))
+
+death_17_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_17 = mean(total_deaths))
+
+death_17_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_17 = mean(total_deaths))
+
+#cohesive table so it's easier to visualize 
+#Low Population Table 2007-2017
+all_low_second <- death_07_low %>% 
+  mutate(death_12_low) %>% 
+  mutate(death_17_low)
+
+#High Population Table 2007-2017
+all_high_second <- death_07_high %>% 
+  mutate(death_12_high) %>% 
+  mutate(death_17_high)
+
+kable(list(all_high_second))
+kable(list(all_low_second))
 ```
 
+***
+
+Let's graph the previous tables!
+```{r}
+
+```
 
 ***
 
@@ -329,8 +440,6 @@ hp_countries_population <- world_pop %>%
   select(Count) %>% 
   summarize(average_population = mean(Count))
 
-#hp_countries_population
-
 lp_countries_population <- world_pop %>% 
   filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1996) %>% 
   group_by(Country.Name) %>% 
@@ -354,6 +463,27 @@ ggplot(lp_countries_population)+
              ylab("Average Population")+
              ggtitle("Average low-population countries")+
   coord_flip()
+
+#Percentage of those affected 
+affected_high<- joined_high %>% 
+  mutate(percent_high = total_deaths/Count)
+
+percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
+  geom_point() +
+  labs(title = "Percentage of High Populated Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/Count)")
+ggplotly(percent_high)
+
+affected_low <- joined_low %>% 
+  mutate(percent_low = total_deaths/Count)
+
+percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
+  geom_point() +
+  labs(title = "Percentage of Low Populated Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/Count)")
+ggplotly(percent_low)
 ```
 
 
