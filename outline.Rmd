@@ -38,12 +38,12 @@ options(scipen=999)
   + Last update: 2 years ago
   
 Import the deaths-due-to-air-pollution data
-```{r, echo=FALSE}
+```{r}
 deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
 ```
   
 We are going to rename a few of the columns and glimpse the data
-```{r, echo=FALSE}
+```{r}
 colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
 
 glimpse(deaths_df)
@@ -77,7 +77,7 @@ Variables that interest us here include:
 ***
 
 Now, let's take a look at the population data.
-```{r, echo=FALSE}
+```{r}
 world_pop <- read.csv("population_total_long.csv")
 glimpse(world_pop)
 ```
