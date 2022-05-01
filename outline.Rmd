@@ -244,7 +244,7 @@ ggplotly(l_indoor)
 #Outdoor Air Pollution
 l_outdoor <- ggplot(low_poll, aes(x=country, y = avg_outdoor, color = avg_ozone)) +
   geom_point() +
-  labs(title = "Average Death due to Outdoor Air Pollution for Low Population", subtitle = "Colored by Average Ozone Air Pollution Deaths")
+  labs(title = "Average Death due to Outdoor Air Pollution for Low Population")
 ggplotly(l_outdoor)
 ```
 
@@ -543,12 +543,29 @@ ggplotly(ozone_top)
 
 # Which is worse? 
 > outdoor or indoor pollution?
-```{r}
 
+Let's reintroduce a graph we looked at earlier. Instead this time we will combine the pollutant types together.
+```{r, echo=FALSE}
+#Plot High Population
+h_pollutant<- ggplot(high_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
+  geom_point() +
+  ggtitle("High Population Pollutant Type Death Counts")
+ggplotly(h_pollutant)
 
-
-
+#Plot Low Population
+l_pollutant<- ggplot(low_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
+  geom_point() +
+  ggtitle("Low Population Pollutant Type Death Counts")
+ggplotly(l_pollutant)
 ```
+
+We cannot conclude which is worse. 
+
+* Low Populated Countries: 
+  + it's half-and-half
+  
+* High Populated Countries: 
+  + Outdoor pollution seems to be more detrimental with the exception of two countries in this sample set.
 
 
 # Reminder: Include this in the beginning 
