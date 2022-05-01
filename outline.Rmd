@@ -367,6 +367,25 @@ kable(list(all_low_second))
 
 Let's graph the previous tables!
 ```{r}
+#High Population Deaths 2007 and 20012
+p_high <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= country)) +
+  geom_point()
+
+interact_high<- p_high + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
+
+ggplotly(interact_high)
+
+#Low Population Deaths 2007 and 2012
+p_low <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= country)) +
+  geom_point()
+
+interact_low<- p_low + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
+
+ggplotly(interact_low)
 
 ```
 
