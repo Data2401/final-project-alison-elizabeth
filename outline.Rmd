@@ -16,7 +16,7 @@ date: '2022-05-03'
   + determine which air pollutant type has the highest associated death rate
   
 # Packages Required 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 #This will allow us to filter through our data 
 library(tidyverse)
 library(dplyr)
@@ -29,8 +29,8 @@ library(kableExtra)
 library(plotly)
 ```
 
-# Data Details 
-* Deaths from air pollution:
+# Pollution Data
+* Deaths from pollution:
   + Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
   + Author: Akshat Giri
   + Last update: 2 years ago
@@ -47,9 +47,32 @@ colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_d
 glimpse(deaths_df)
 ```
 
-Variables that interest us here include: country, total_deaths, indoor_deaths, outdoor_deaths, ozone_deaths 
+# Data Variables
+Variables that interest us here include: 
 
-# Data Continued
+* __country__ 
+* __total_deaths__: per 100,000
+* __indoor_deaths__: Indoor air pollution is considered pollution that occurs in the household. Cooking with solid fuels:
+  + Wood
+  + Crop waste, dung
+  + Charcoal, coal
+* __outdoor_deaths__: Outdoor air or ambient air are emissions caused by combustion processes from motor vehicles, solid fuel burning and industry 
+  + Ozone (O3)
+  + Particulate matter (PM10 and PM2.5)
+  + Nitrogen dioxide (NO2)
+  + Carbon monoxide (CO)
+  + Sulfur dioxide (SO2)
+* __ozone_deaths__: Ozone is a gas that occurs both in Earth's upper atmosphere and at ground level.
+  + Pollutants emitted by cars
+  + Power plants, industrial boilers, refineries, chemical plants
+
+# World Population Data 
+* World Population:
+  + Kaggle: [] 
+  + Author: 
+  + Last update: 
+
+***
 
 Now, let's take a look at the population data.
 ```{r}
@@ -86,6 +109,8 @@ low_pop_countries <- world_pop %>%
 head(low_pop_countries)
 ```
 
+*** 
+
 Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
 ```{r}
 #selecting high-population deaths from death dataframe 
@@ -103,6 +128,8 @@ low_pop_death <- deaths_df %>%
 head(low_pop_death)
 
 ```
+
+***
 
 Lastly, we will join the population and and deaths with its respected country.
 ```{r}
