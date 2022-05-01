@@ -27,6 +27,8 @@ library(knitr)
 library(kableExtra)
 #This expands our plot uses 
 library(plotly)
+#Scientific Notation Disabled 
+options(scipen=999)
 ```
 
 # Pollution Data
@@ -195,7 +197,8 @@ ggplotly(l)
 
 *** 
 
-# Which type of pollution has the greatest number of deaths?
+# Pollution Types
+> Which type of pollution has the greatest number of deaths?
 
 ```{r}
 #High Population Pollutant Averages
@@ -248,7 +251,16 @@ ggplotly(l_outdoor)
 ***
 
 # Pollution Over Time 
-## Which year had the worst pollution?
+> Which year had the worst pollution?
+
+```{r}
+
+
+```
+
+
+***
+
 ## Which year had the worst indoor? Outdoor particulate? Outdoor ozone? 
 # Which is worse - outdoor or indoor pollution?
 
@@ -285,7 +297,7 @@ deaths_highpop_countries <- deaths_df %>%
 
 #Mean total deaths from 1990-2017 of high-population countries
 deaths_lowpop_countries<- deaths_df %>% 
-  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_low = mean(total_deaths))
@@ -306,7 +318,6 @@ ggplot(deaths_lowpop_countries)+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average total deaths in low-population countries")+
   coord_flip()
-
 ```
 
 This shows us the deaths due to pollution, but what about the average population of those countries at that time? 

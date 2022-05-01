@@ -446,11 +446,40 @@ tonga <- deaths_df %>% filter(country == "Tonga" & year > 1999)
 
 ```
 
-#
+# Final Outline 
+# Question 1 Code
 ```{r}
+#Mean total deaths from 1996-2017 of high-population countries
+deaths_highpop_countries <- deaths_df %>% 
+  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_high = mean(total_deaths))
 
+#Mean total deaths from 1990-2017 of high-population countries
+deaths_lowpop_countries<- deaths_df %>% 
+  filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(average_death_low = mean(total_deaths))
 
+#death_lowpop_countries
+kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
+ggplot(deaths_highpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_high))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in high-population countries")+
+  coord_flip()
+
+ggplot(deaths_lowpop_countries)+
+  geom_col(mapping = aes(x=country, y=average_death_low))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average total deaths in low-population countries")+
+  coord_flip()
 ```
+
 
 
