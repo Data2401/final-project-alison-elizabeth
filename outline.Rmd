@@ -307,7 +307,7 @@ low_poll <- deaths_df %>%
   filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   select(country, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
-kable(low_poll)
+kable(low_poll, ascending=TRUE)
 
 #Plot Low Population
 #Indoor Air Pollution
