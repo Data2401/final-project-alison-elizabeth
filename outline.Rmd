@@ -651,42 +651,6 @@ We cannot conclude which is worse.
 * High Populated Countries: 
   + Outdoor pollution seems to be more detrimental with the exception of two countries in this sample set.
 
-
-# We have this included already  
-
-```{r}
-#Mean total deaths from 1996-2017 of high-population countries
-deaths_highpop_countries <- deaths_df %>% 
-  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
-  group_by(country) %>% 
-  select(total_deaths) %>% 
-  summarize(average_death_high = mean(total_deaths))
-
-#Mean total deaths from 1990-2017 of high-population countries
-deaths_lowpop_countries<- deaths_df %>% 
-  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
-  group_by(country) %>% 
-  select(total_deaths) %>% 
-  summarize(average_death_low = mean(total_deaths))
-
-#Average Death of both High and Low Populated countries  
-kable(list(deaths_highpop_countries, deaths_lowpop_countries))
-
-ggplot(deaths_highpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_high))+
-             xlab("Country")+
-             ylab("Average deaths (per 100,000)")+
-             ggtitle("Average total deaths in high-population countries")+
-  coord_flip()
-
-ggplot(deaths_lowpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_low))+
-             xlab("Country")+
-             ylab("Average deaths (per 100,000)")+
-             ggtitle("Average total deaths in low-population countries")+
-  coord_flip()
-```
-
 # Summary 
 
 
