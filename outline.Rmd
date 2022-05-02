@@ -653,6 +653,30 @@ We cannot conclude which is worse.
 
 # Summary 
 
+* Which country has the highest average death count?
+  + High Population: Pakistan
+  + Low Population: Malawi
+* Has the percentage of the affected population decreased or increased over time?
+  + Generally it is decreasing for both High and Low populated countries 
+* Which pollutant type has the greatest number of deaths?
+  + High Population: Indoor Pollution
+  + Low Population: Indoor Pollution
+* How has the death count changed over the past two decades?
+  + 1996-2006: 
+    - High Population: Decreases
+    - Low Population: Decreases
+    - Outliers: Nigeria, Pakistan
+  + 2007-2017: 
+    - High Population: Decreases 
+    - Low Population: Decreases
+    - Outlliers: N/A
+* Which year and country had the highest number of deaths per pollutant type?
+  + We looked at years 1996-2017 
+  + Indoor: Pakistan and Malawi were mainly affected in 1996
+  + Outdoor: Serbia and Pakistan were the top countries. 2011 was the worst for Pakistan. 
+  + Outdoor Ozone: Pakistan and Malawi were the top countries. 1997 was the worst for Pakistan. 
+* Which is worse - outdoor or indoor pollution?
+  + Inconclusive
 
 
 # Sources
