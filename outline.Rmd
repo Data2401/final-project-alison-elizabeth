@@ -111,8 +111,6 @@ ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
   geom_boxplot()+
   labs(title="Selection of high-population countries", x="Country", y="Population (in millions)")
 
-#glimpse(high_pop_countries)
-
 #selecting low-population countries from the world population data frame 
 low_pop_countries <- world_pop %>% 
   filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
@@ -122,9 +120,8 @@ ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
   geom_boxplot()+
   labs(title="Selection of low-population countries", x="Country", y="Population (in millions)")
 
-#glimpse(low_pop_countries)
 
-kable(list(high_pop_countries, low_pop_countries))
+kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 
 
 ```
@@ -134,22 +131,8 @@ kable(list(high_pop_countries, low_pop_countries))
 
 First let's look at a table of the high and low populated countries using the world population data set.
 ```{r, echo=FALSE}
-#selecting high-population countries from the world population data frame 
-high_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
-  group_by(Year)
-
-head(high_pop_countries)
-
-#selecting low-population countries from the world population data frame 
-low_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
-  group_by(Year)
-
-head(low_pop_countries)
+kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 ```
-
-*** 
 
 Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
 ```{r, echo=FALSE}
@@ -158,29 +141,26 @@ high_pop_death <- deaths_df %>%
   filter(year > 1996 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(year)
 
-head(high_pop_death)
 
 #selecting low-population deaths from death dataframe 
 low_pop_death <- deaths_df %>% 
   filter(year > 1996 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(year)
 
-head(low_pop_death)
-
+kable(head(list(high_pop_death[1:22,], low_pop_death[1:22,])))
 ```
 
-***
 
 Lastly, we will join the population and and deaths with its respected country.
 ```{r, message=FALSE, echo=FALSE}
 #Combined High Population with Pollution Death
 joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
-head(joined_high)
+
 
 #Combined Low Population with Pollution Death
 joined_low <-right_join(low_pop_death, low_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
-head(joined_low) 
 
+kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 ```
 
 # Death Count
