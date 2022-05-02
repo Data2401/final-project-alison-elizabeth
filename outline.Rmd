@@ -161,12 +161,22 @@ joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 
 joined_low <-right_join(low_pop_death, low_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
 
 kable(head(list(joined_high[1:22,], joined_low[1:22,])))
+```
 
-percent_low_graph <- ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
-  geom_line()
-ggplotly(percent_low_graph)
+***
 
+```{r, echo=FALSE}
+ggplot(data=joined_high, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
+  geom_line() +
+  labs(title="Percentage of Death Count High Population", subtitle="Bar width is equal to percentage of Deaths")+
+  xlab("Year")+
+  ylab("Population")
 
+ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
+  geom_line() +
+  labs(title="Percentage of Death Count Low Population", subtitle="Bar width is equal to percentage of Deaths")+
+  xlab("Year")+
+  ylab("Population")
 ```
 
 # Death Count
@@ -200,7 +210,7 @@ Here's a graph to clearly visualize the previous table
 ```{r, echo=FALSE, message=FALSE}
 #Plot High Population Deaths (average)
 h<- ggplot(deaths_highpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_high))+
+  geom_col(mapping = aes(x=country, y=average_death_high, color=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average total deaths in high-population countries")+
@@ -210,7 +220,7 @@ ggplotly(h)
 
 #Plot of Low Population Deaths (average)
 l <- ggplot(deaths_lowpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_low))+
+  geom_col(mapping = aes(x=country, y=average_death_low, color=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average total deaths in low-population countries")+
@@ -660,12 +670,12 @@ deaths_highpop_countries <- deaths_df %>%
 
 #Mean total deaths from 1990-2017 of high-population countries
 deaths_lowpop_countries<- deaths_df %>% 
-  filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
   summarize(average_death_low = mean(total_deaths))
 
-#death_lowpop_countries
+#Average Death of both High and Low Populated countries  
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
 ggplot(deaths_highpop_countries)+
