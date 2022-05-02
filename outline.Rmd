@@ -107,8 +107,9 @@ high_pop_countries <- world_pop %>%
   filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
   
-ggplot(high_pop_countries, aes(x=Country.Name, y=Count))+
-  geom_boxplot()
+ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+  geom_boxplot()+
+  labs(title="Selection of high-population countries", x="Country", y="Population (in millions)")
 
 #glimpse(high_pop_countries)
 
@@ -117,8 +118,9 @@ low_pop_countries <- world_pop %>%
   filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
 
-ggplot(low_pop_countries, aes(x=Country.Name, y=Count))+
-  geom_boxplot()
+ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+  geom_boxplot()+
+  labs(title="Selection of low-population countries", x="Country", y="Population (in millions)")
 
 #glimpse(low_pop_countries)
 
