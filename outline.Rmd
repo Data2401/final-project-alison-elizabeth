@@ -168,13 +168,13 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 ```{r, echo=FALSE}
 ggplot(data=joined_high, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
   geom_line() +
-  labs(title="Percentage of Death Count High Population", subtitle="Bar width is equal to percentage of Deaths")+
+  labs(title="Percentage of Death Count in High Population Countries", subtitle="Bar width is equal to percentage of Deaths")+
   xlab("Year")+
   ylab("Population")
 
 ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
   geom_line() +
-  labs(title="Percentage of Death Count Low Population", subtitle="Bar width is equal to percentage of Deaths")+
+  labs(title="Percentage of Death Count in Low Population Countries", subtitle="Bar width is equal to percentage of Deaths")+
   xlab("Year")+
   ylab("Population")
 ```
@@ -190,14 +190,14 @@ deaths_highpop_countries <- deaths_df %>%
   filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
-  summarize(average_death_high = mean(total_deaths))
+  summarize(hp_average_death = mean(total_deaths))
 
 #Mean total deaths of high-population countries
 deaths_lowpop_countries<- deaths_df %>% 
   filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(country) %>% 
   select(total_deaths) %>% 
-  summarize(average_death_low = mean(total_deaths))
+  summarize(lp_average_death = mean(total_deaths))
 
 #Side-by-side Table to view deaths 
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
@@ -210,20 +210,20 @@ Here's a graph to clearly visualize the previous table
 ```{r, echo=FALSE, message=FALSE}
 #Plot High Population Deaths (average)
 h<- ggplot(deaths_highpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_high, color=country))+
+  geom_col(mapping = aes(x=country, y=hp_average_death, color=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
-             ggtitle("Average total deaths in high-population countries")+
+             ggtitle("Average deaths in high-population countries")+
   coord_flip()
 
 ggplotly(h)
 
 #Plot of Low Population Deaths (average)
 l <- ggplot(deaths_lowpop_countries)+
-  geom_col(mapping = aes(x=country, y=average_death_low, color=country))+
+  geom_col(mapping = aes(x=country, y=lp_average_death, color=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
-             ggtitle("Average total deaths in low-population countries")+
+             ggtitle("Average deaths in low-population countries")+
   coord_flip()
 
 ggplotly(l)
@@ -248,40 +248,25 @@ lp_countries_population <- world_pop %>%
 #Population Average Table
 kable(list(hp_countries_population, lp_countries_population))
 
-#Graph of Population Average
-ggplot(hp_countries_population)+
-  geom_col(mapping = aes(x=Country.Name, y=average_population))+
-             xlab("Country")+
-             ylab("Average Population")+
-             ggtitle("Average high-population countries")+
-  coord_flip()
-
-ggplot(lp_countries_population)+
-  geom_col(mapping = aes(x=Country.Name, y=average_population))+
-             xlab("Country")+
-             ylab("Average Population")+
-             ggtitle("Average low-population countries")+
-  coord_flip()
-
 #Percentage of those affected 
 affected_high<- joined_high %>% 
-  mutate(percent_high = total_deaths/Count)
+  mutate(percent_high = total_deaths/mean(Count))
 
 percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
   geom_point() +
-  labs(title = "Percentage of High Populated Countries Affected by Air Pollution") +
+  labs(title = "High Population Countries Affected by Air Pollution") +
   xlab("Year")+
-  ylab("Percent (total_deaths/Count)")
+  ylab("Percent (total_deaths/average pop)")
 ggplotly(percent_high)
 
 affected_low <- joined_low %>% 
-  mutate(percent_low = total_deaths/Count)
+  mutate(percent_low = total_deaths/mean(Count))
 
 percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
   geom_point() +
-  labs(title = "Percentage of Low Populated Countries Affected by Air Pollution") +
+  labs(title = "Low Populated Countries Affected by Air Pollution") +
   xlab("Year")+
-  ylab("Percent (total_deaths/Count)")
+  ylab("Percent (total_deaths/average pop)")
 ggplotly(percent_low)
 ```
 
@@ -322,7 +307,7 @@ low_poll <- deaths_df %>%
   filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   select(country, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
-low_poll
+kable(low_poll)
 
 #Plot Low Population
 #Indoor Air Pollution
