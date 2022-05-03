@@ -105,7 +105,7 @@ Low population = high population * .10
 ```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
-  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  filter(Year> 1995 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
   
 high<- ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
@@ -115,7 +115,7 @@ ggplotly(high)
 
 #selecting low-population countries from the world population data frame 
 low_pop_countries <- world_pop %>% 
-  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  filter(Year> 1995 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
 
 low<- ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
@@ -141,13 +141,13 @@ Next, we are going to see the death count for high and low populated countries u
 ```{r, echo=FALSE}
 #selecting high-population deaths from death dataframe 
 high_pop_death <- deaths_df %>% 
-  filter(year > 1996 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  filter(year > 1995 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(year)
 
 
 #selecting low-population deaths from death dataframe 
 low_pop_death <- deaths_df %>% 
-  filter(year > 1996 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  filter(year > 1995 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
   group_by(year)
 
 kable(head(list(high_pop_death[1:22,], low_pop_death[1:22,])))
@@ -237,13 +237,13 @@ So we've looked at the deaths due to pollution, but what percentage of the popul
 
 ```{r, echo=FALSE, message=FALSE}
 hp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1996) %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1995) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
 
 lp_countries_population <- world_pop %>% 
-  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1996) %>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1995) %>% 
   group_by(Country.Name) %>% 
   select(Count) %>% 
   summarize(average_population = mean(Count))
@@ -339,7 +339,8 @@ ggplotly(l_outdoor)
 
 # Pollution Over Time 
 > Let's look at the previous two decades and compare the death count
-> Has there been a change?
+
+> has there been a change?
 
 This is the first decade 1996-2006
 ```{r, echo=FALSE, message=FALSE}
@@ -454,7 +455,7 @@ kable(list(all_low_second))
 
 Let's graph the previous tables!
 
-The first decade.
+The first decade 1996-2006.
 ```{r, echo=FALSE}
 #High Population Deaths 1996-2006 
 p_high_first <- all_high_first %>%
@@ -481,7 +482,7 @@ ggplotly(interact_low_first)
 
 *** 
 
-This shows the second decade.
+This shows the second decade 2007-2017.
 ```{r, echo=FALSE}
 #High Population Deaths 2007-2017
 p_high_second <- all_high_second %>%
@@ -515,7 +516,7 @@ Indoor Deaths
 ```{r, echo=FALSE}
 #Indoor 1997-2017
 indoor_high<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('United States', 'Brazil','Nigeria', 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
                                        'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country, year, indoor_deaths) %>% 
   ggplot()+
@@ -526,7 +527,7 @@ indoor_high<- deaths_df %>%
 ggplotly(indoor_high)
 
 indoor_low<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('Canada', 'Chile', 'Malawi', 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
                                        'Serbia', 'Sri Lanka', 'Tonga')) %>% 
   group_by(country, year, indoor_deaths) %>% 
   ggplot()+
@@ -538,7 +539,7 @@ ggplotly(indoor_low)
 
 #Pakistan and Malawi were both mainly affected in 1996
 indoor_top<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('Pakistan', 'Malawi')) %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
   group_by(country, year, indoor_deaths) %>% 
   ggplot()+
   geom_point(aes(year, indoor_deaths, color = country))+
@@ -554,7 +555,7 @@ Outdoor Deaths
 ```{r, echo= FALSE}
 #Outdoor Particulate 1997-2017
 outdoor_high<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('United States', 'Brazil','Nigeria', 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
                                        'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country, year, outdoor_deaths) %>% 
   ggplot()+
@@ -565,7 +566,7 @@ outdoor_high<- deaths_df %>%
 ggplotly(outdoor_high)
 
 outdoor_low<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('Canada', 'Chile', 'Malawi', 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
                                        'Serbia', 'Sri Lanka', 'Tonga')) %>% 
   group_by(country, year, outdoor_deaths) %>% 
   ggplot()+
@@ -578,7 +579,7 @@ ggplotly(outdoor_low)
 #Serbia and Pakistan were the top countries affected. 
 #2011 Pakistan had the greatest amount of Outdoor Deaths
 outdoor_top<- deaths_df %>% 
-    filter(year> 1997 & country %in% c('Pakistan', 'Serbia')) %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Serbia')) %>% 
   group_by(country, year, outdoor_deaths) %>% 
   ggplot()+
   geom_point(aes(year, outdoor_deaths, color = country))+
@@ -593,7 +594,7 @@ Ozone Deaths
 ```{r, echo=FALSE}
 #Outdoor ozone 1997-2017
 ozone_high<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('United States', 'Brazil','Nigeria', 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
                                        'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(country, year, ozone_deaths) %>% 
   ggplot()+
@@ -604,7 +605,7 @@ ozone_high<- deaths_df %>%
 ggplotly(ozone_high)
 
 ozone_low<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('Canada', 'Chile', 'Malawi', 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
                                        'Serbia', 'Sri Lanka', 'Tonga')) %>% 
   group_by(country, year, ozone_deaths) %>% 
   ggplot()+
@@ -617,7 +618,7 @@ ggplotly(ozone_low)
 #Malawi and Pakistan were the top countries affected 
 #1997 had the greatest amount of ozone death in Pakistan
 ozone_top<- deaths_df %>% 
-    filter(year> 1996 & country %in% c('Pakistan', 'Malawi')) %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
   group_by(country, year, ozone_deaths) %>% 
   ggplot()+
   geom_point(aes(year, ozone_deaths, color = country))+
@@ -678,7 +679,9 @@ We cannot conclude which is worse.
     - 2011 was the worst for Pakistan. 
     - 2005 was the worst for Serbia 
     - Sri Lanka and Tonga increased, but Sri Lanka had a steep decrease after 2015 
-  + Outdoor Ozone: Pakistan and Malawi were the top countries. 1997 was the worst for Pakistan. 
+  + Outdoor Ozone: Pakistan and Malawi were the top countries. 
+    - 1997 was the worst for Pakistan. 
+    - 1998 was the worst for Malawi
     - United States was the second highest amount of deaths among the higher populated countries
     - Pakistan decreased and then slightly increased
 * Which is worse - outdoor or indoor pollution?
