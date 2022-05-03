@@ -649,11 +649,11 @@ ggplotly(l_pollutant)
 
 We cannot conclude which is worse. 
 
-* Low Populated Countries: 
-  + it's half-and-half
-  
 * High Populated Countries: 
   + Outdoor pollution seems to be more detrimental with the exception of two countries in this sample set.
+
+* Low Populated Countries: 
+  + it's half-and-half
 
 # Summary 
 
