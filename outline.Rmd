@@ -105,21 +105,23 @@ Low population = high population * .10
 ```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
   group_by(Year)
   
-ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+high<- ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
   geom_boxplot()+
   labs(title="Selection of high-population countries", x="Country", y="Population (in millions)")
+ggplotly(high)
 
 #selecting low-population countries from the world population data frame 
 low_pop_countries <- world_pop %>% 
-  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
   group_by(Year)
 
-ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+low<- ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
   geom_boxplot()+
   labs(title="Selection of low-population countries", x="Country", y="Population (in millions)")
+ggplotly(low)
 
 
 kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
