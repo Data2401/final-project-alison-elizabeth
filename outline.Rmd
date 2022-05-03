@@ -180,7 +180,7 @@ ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/
 ```
 
 # Death Count
-> Which country has the highest death count?
+> Which country has the highest average death count?
 
 Let's make a table depicting the high and low populated countries and their respected death count due to pollution.
 
@@ -678,5 +678,21 @@ We cannot conclude which is worse.
 * Which is worse - outdoor or indoor pollution?
   + Inconclusive
 
-
 # Sources
+* [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017 ]
+
+* [https://www.worldometers.info/population/world/]
+
+* [https://www.who.int/health-topics/air-pollution#tab=tab_1]
+
+* [https://www.epa.gov/ground-level-ozone-pollution/ground-level-ozone-basics]
+
+* [https://www.health.nsw.gov.au/environment/air/Pages/outdoor-air-pollution.aspx]
+
+* [https://www.mana.md/indoor-air-vs-outdoor-air/]
+
+* [https://www.kaggle.com/datasets/imdevskp/world-population-19602018]
+
+
+
+
