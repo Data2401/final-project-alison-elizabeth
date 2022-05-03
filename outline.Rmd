@@ -256,7 +256,7 @@ affected_high<- joined_high %>%
   mutate(percent_high = total_deaths/mean(Count))
 
 percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
-  geom_point() +
+  geom_line() +
   labs(title = "High Population Countries Affected by Air Pollution") +
   xlab("Year")+
   ylab("Percent (total_deaths/average pop)")
