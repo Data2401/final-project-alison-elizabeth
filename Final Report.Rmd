@@ -105,6 +105,9 @@ We selected a high population from each continent and used the formula below to 
 
 Low population = high population * .10
   
+  - We wanted to have a consistent variation between our selection of low and high populated countries. 
+  - Based on our calculation we selected the low populated country that was closest to 10% of the high populated country.
+  - EX: U.S (high populated) = 331002651. If we multiply by .10 we get 33100265.1 and Canada (low populated) was a population of 37742154 which was closest to 10% of the US population in 2020
 ```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
