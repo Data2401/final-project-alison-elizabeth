@@ -174,6 +174,8 @@ joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 
 #Combined Low Population with Pollution Death
 joined_low <-right_join(low_pop_death, low_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
 
+joined_select <- full_join(joined_high, joined_low)
+
 kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 ```
 
@@ -267,6 +269,52 @@ deaths_lowpop_countries<- deaths_df %>%
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
 ```
+
+> Let's see how this is different from continent to continent 
+
+```{r}
+#Mean total deaths for each continent
+deaths_north <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  summarize(north_america_deaths = mean(total_deaths))
+
+
+deaths_south <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  summarize(south_america_deaths = mean(total_deaths))
+
+
+deaths_africa <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  summarize(africa_deaths = mean(total_deaths))
+
+
+deaths_europe <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  summarize(europe_deaths = mean(total_deaths))
+
+
+deaths_asia <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  summarize(asia_deaths = mean(total_deaths))
+
+
+deaths_oceania <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  summarize(oceania_deaths = mean(total_deaths))
+
+
+#Table to view continent deaths 
+kable(deaths_north, caption = "North America Average Death Count")
+kable(deaths_south, caption = "South America Average Death Count")
+kable(deaths_africa, caption = "Africa Average Death Count")
+kable(deaths_asia, caption = "Asia Average Death Count")
+kable(deaths_europe, caption = "Europe Average Death Count")
+kable(deaths_oceania, caption = "Oceania Average Death Count")
+
+```
+
+
 
 ***
 
