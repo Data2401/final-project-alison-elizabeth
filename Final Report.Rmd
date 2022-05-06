@@ -171,6 +171,7 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 
 ***
 
+
 ```{r, echo=FALSE}
 ggplot(data=joined_high, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
   geom_line() +
