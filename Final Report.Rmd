@@ -108,6 +108,7 @@ Low population = high population * .10
   - We wanted to have a consistent variation between our selection of low and high populated countries. 
   - Based on our calculation we selected the low populated country that was closest to 10% of the high populated country.
   - EX: U.S (high populated) = 331002651. If we multiply by .10 we get 33100265.1 and Canada (low populated) was a population of 37742154 which was closest to 10% of the US population in 2020
+  
 ```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
 high_pop_countries <- world_pop %>% 
@@ -139,11 +140,14 @@ kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 # Combine Data Sets
 
 First let's look at a table of the high and low populated countries using the world population data set.
+
 ```{r, echo=FALSE}
 kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 ```
+***
 
 Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
+
 ```{r, echo=FALSE}
 #selecting high-population deaths from death dataframe 
 high_pop_death <- deaths_df %>% 
@@ -158,9 +162,10 @@ low_pop_death <- deaths_df %>%
 
 kable(head(list(high_pop_death[1:22,], low_pop_death[1:22,])))
 ```
-
+***
 
 Lastly, we will join the population and and deaths with its respected country.
+
 ```{r, message=FALSE, echo=FALSE}
 #Combined High Population with Pollution Death
 joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
@@ -175,6 +180,7 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 ***
 
 This is a closer view on the population growth over time in both the high and low populated countries that we selected.
+
 ```{r, echo=FALSE}
 pop_high_growth<- ggplot(data=joined_high, aes(x=year, y=Count, color=country)) +
   geom_line() +
@@ -236,10 +242,11 @@ kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 ***
 
 Here's a graph to clearly visualize the previous table
+
 ```{r, echo=FALSE, message=FALSE}
 #Plot High Population Deaths (average)
 h<- ggplot(deaths_highpop_countries)+
-  geom_col(mapping = aes(x=country, y=hp_average_death, color=country))+
+  geom_col(mapping = aes(x=country, y=hp_average_death, fill=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average deaths in high-population countries")+
@@ -249,7 +256,7 @@ ggplotly(h)
 
 #Plot of Low Population Deaths (average)
 l <- ggplot(deaths_lowpop_countries)+
-  geom_col(mapping = aes(x=country, y=lp_average_death, color=country))+
+  geom_col(mapping = aes(x=country, y=lp_average_death, fill=country))+
              xlab("Country")+
              ylab("Average deaths (per 100,000)")+
              ggtitle("Average deaths in low-population countries")+
