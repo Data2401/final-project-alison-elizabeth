@@ -179,6 +179,35 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 
 ***
 
+Combine the data based on continent.
+
+```{r}
+joined_all <- right_join(deaths_df, world_pop, by=c('country' = 'Country.Name', 'year' = 'Year'))
+head(joined_all)
+
+north_america <- joined_all %>% filter(country %in% c("United States", "Canada"))
+head(na.omit(north_america))
+
+south_america <- joined_all %>% filter(country %in% c("Brazil", "Chile"))
+head(na.omit(south_america))
+
+africa <- joined_all %>% filter(country %in% c("Nigeria", "Malawi"))
+head(na.omit(africa))
+
+europe <- joined_all %>% filter(country %in% c("Germany", "Serbia"))
+head(na.omit(europe))
+
+asia <- joined_all %>% filter(country %in% c("Pakistan", "Sri Lanka"))
+head(na.omit(asia))
+
+oceania <- joined_all %>% filter(country %in% c("Australia", "New Zealand"))
+head(na.omit(oceania))
+
+```
+
+
+***
+
 This is a closer view on the population growth over time in both the high and low populated countries that we selected.
 
 ```{r, echo=FALSE}
