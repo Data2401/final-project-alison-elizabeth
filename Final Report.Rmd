@@ -44,13 +44,14 @@ options(scipen=999)
   
 Import the deaths-due-to-air-pollution data
 ```{r}
-deaths_df <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
-glimpse(deaths_df)
+deaths_df_old <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
+glimpse(deaths_df_old)
 ```
-  
+Fixed: use rename instead of colnames
+
 We are going to rename a few of the columns and glimpse the data
 ```{r}
-colnames(deaths_df) <- c("country", "acronym", "year", "total_deaths", "indoor_deaths", "outdoor_deaths", "ozone_deaths")
+deaths_df<- deaths_df_old %>% rename(country=Entity, acronym=Code, year=Year, total_deaths=Air.pollution..total...deaths.per.100.000., indoor_deaths=Indoor.air.pollution..deaths.per.100.000., outdoor_deaths=Outdoor.particulate.matter..deaths.per.100.000., ozone_deaths=Outdoor.ozone.pollution..deaths.per.100.000.)
 
 glimpse(deaths_df)
 ```
