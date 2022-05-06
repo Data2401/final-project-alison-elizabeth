@@ -4,6 +4,8 @@ author: "Alison Cheek & Elizabeth Bekele"
 date: '2022-05-06'
 output: html_document
 ---
+We were excited to do our report over this data because it was relatively tidy and had quite a few categorical variables and options for additional columns to graph.
+
 
 # Introduction 
 * Air pollution can be detrimental to both our health and the climate
