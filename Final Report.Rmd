@@ -171,6 +171,25 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 
 ***
 
+This is a closer view on the population growth over time in both the high and low populated countries that we selected.
+```{r, echo=FALSE}
+pop_high_growth<- ggplot(data=joined_high, aes(x=year, y=Count, color=country)) +
+  geom_line() +
+  labs(title="Population Over Time in High Populated Countries")+
+  xlab("Year")+
+  ylab("Population")
+ggplotly(pop_high_growth)
+
+pop_low_growth<- ggplot(data=joined_low, aes(x=year, y=Count, color=country)) +
+  geom_line() +
+  labs(title="Population Over Time in Low Populated Countries")+
+  xlab("Year")+
+  ylab("Population")
+ggplotly(pop_low_growth)
+```
+
+
+
 
 ```{r, echo=FALSE}
 ggplot(data=joined_high, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
