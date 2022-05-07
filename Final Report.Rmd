@@ -606,22 +606,73 @@ north_17 <- na.omit(north_america)  %>%
 
 kable(list(north_07,north_12,north_17), caption = "North America Deaths 2007-2017")
 
-
-
-
-
-
-
-
-deaths_south <- na.omit(south_america)  %>% 
+south_96 <- na.omit(south_america)  %>% 
   group_by(country) %>% 
-  summarize(south_america_deaths = mean(total_deaths))
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
 
-
-deaths_africa <- na.omit(africa)  %>% 
+south_01 <- na.omit(south_america)  %>% 
   group_by(country) %>% 
-  summarize(africa_deaths = mean(total_deaths))
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
 
+south_06 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(south_96,south_01,south_06), caption = "South America Deaths 1996-2006")
+
+south_07 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+south_12 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+south_17 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(south_07,south_12,south_17), caption = "South America Deaths 2007-2017")
+
+africa_96 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+africa_01 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+africa_06 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(africa_96,africa_01,africa_06), caption = "Africa Deaths 1996-2006")
+
+africa_07 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+africa_12 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+africa_17 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(africa_07,africa_12,africa_17), caption = "Africa Deaths 2007-2017")
 
 deaths_europe <- na.omit(europe)  %>% 
   group_by(country) %>% 
