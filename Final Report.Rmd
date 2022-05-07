@@ -408,14 +408,12 @@ low_poll <- deaths_df %>%
   select(country, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
   summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
 
-kable(low_poll, ascending=TRUE)
-
 kable(low_poll)
 ```
 
 
 ***
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 
 #Plot High Population
 # High Indoor Air Pollution
@@ -436,6 +434,7 @@ ggplotly(l_indoor)
 
 # High Outdoor Air Pollution
 h_outdoor <- ggplot(high_poll, aes(x=country, y = avg_outdoor, color = avg_ozone, cex=5)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "violet", aesthetics = "colour") +
   geom_point() +
   labs(title = "Outdoor Air Pollution Deaths in High Population Countries") +
   xlab("Country") + 
@@ -444,6 +443,7 @@ ggplotly(h_outdoor)
 
 #Low Outdoor Air Pollution
 l_outdoor <- ggplot(low_poll, aes(x = country, y= avg_outdoor, color = avg_ozone, cex=5)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "violet", aesthetics = "colour") +
   geom_point() +
   labs(title = "Outdoor Air Pollution Deaths in Low Population Countries")+
   xlab("Country")+
