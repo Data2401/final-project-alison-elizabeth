@@ -32,7 +32,7 @@ library(kableExtra)
 #This expands our plot uses 
 library(plotly)
 #Scientific Notation Disabled 
-options(scipen=999)
+options(scipen=T)
 ```
 
 
@@ -345,7 +345,7 @@ ggplotly(l)
 *** 
 So we've looked at the deaths due to pollution, but what percentage of the population was affected?
 
-In order to get rid of the leading zeros, and clean up the y-axis, we multiplied the 'percent_high' and 'percent_low' calculation by 10,000,000
+In order to get rid of the leading zeros, and clean up the y-axis, we multiplied the 'percent_high' and 'percent_low' by 100,000 since the data was per 100,000 when calculating deaths.
 
 ```{r, echo=FALSE, message=FALSE}
 hp_countries_population <- world_pop %>% 
@@ -365,7 +365,7 @@ kable(list(hp_countries_population, lp_countries_population))
 
 #Percentage of those affected 
 affected_high<- joined_high %>% 
-  mutate(percent_high = (total_deaths/mean(Count))*(1000000))
+  mutate(percent_high = (total_deaths/mean(Count))*100000)
 
 percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
   geom_point() +
@@ -375,7 +375,7 @@ percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = 
 ggplotly(percent_high)
 
 affected_low <- joined_low %>% 
-  mutate(percent_low = (total_deaths/mean(Count))*(1000000))
+  mutate(percent_low = (total_deaths/mean(Count))*100000)
 
 percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
   geom_point() +
