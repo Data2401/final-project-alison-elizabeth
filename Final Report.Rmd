@@ -568,6 +568,76 @@ kable(list(all_low_second))
 ```
 
 ***
+Let's see if there is variation by continent.
+
+```{r}
+#1996-2006
+north_96 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+north_01 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+north_06 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(north_96,north_01,north_06), caption = "North America Deaths 1996-2006")
+
+north_07 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+north_12 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+north_17 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(north_07,north_12,north_17), caption = "North America Deaths 2007-2017")
+
+
+
+
+
+
+
+
+deaths_south <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  summarize(south_america_deaths = mean(total_deaths))
+
+
+deaths_africa <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  summarize(africa_deaths = mean(total_deaths))
+
+
+deaths_europe <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  summarize(europe_deaths = mean(total_deaths))
+
+
+deaths_asia <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  summarize(asia_deaths = mean(total_deaths))
+
+
+deaths_oceania <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  summarize(oceania_deaths = mean(total_deaths))
+```
+***
 
 Let's graph the previous tables!
 
