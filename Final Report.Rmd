@@ -569,6 +569,7 @@ kable(list(all_low_second))
 
 ***
 Let's see if there is variation by continent.
+Here are some tables for the first decade (1996-2006) and second decade (2007-2017) grouped by continent.
 
 ```{r}
 #North America 1996-2006
@@ -800,6 +801,7 @@ The first decade 1996-2006.
 p_high_first <- all_high_first %>%
   group_by(country) %>% 
   ggplot(aes(x= High_Deaths_96, y= High_Deaths_01, color= High_Deaths_06)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   geom_point() +
   facet_wrap(~country)
 
@@ -811,12 +813,19 @@ ggplotly(interact_high_first)
 p_low_first <- all_low_first %>%
   group_by(country) %>% 
   ggplot(aes(x= Low_Deaths_96, y= Low_Deaths_01, color= Low_Deaths_06)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   geom_point() +
   facet_wrap(~country)
 
 interact_low_first<- p_low_first + labs(title="Low Populated Countries", x="1996 Deaths", y="2001 Deaths")
 
 ggplotly(interact_low_first)
+
+
+#Joined all 
+#X - year 
+# Avg total deaths 
+# color by continent 
 ```
 
 *** 
@@ -827,6 +836,7 @@ This shows the second decade 2007-2017.
 p_high_second <- all_high_second %>%
   group_by(country) %>% 
   ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= High_Deaths_17)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   geom_point() +
   facet_wrap(~country)
 
@@ -838,6 +848,7 @@ ggplotly(interact_high_second)
 p_low_second <- all_low_second %>%
   group_by(country) %>% 
   ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= Low_Deaths_17)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   geom_point() +
   facet_wrap(~country)
 
