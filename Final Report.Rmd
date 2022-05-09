@@ -797,6 +797,18 @@ Let's graph the previous tables!
 
 The first decade 1996-2006.
 ```{r, echo=FALSE}
+#High Population Deaths 1996-2006
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= High_Deaths_96, y= High_Deaths_01, color= High_Deaths_06)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths", y="2001 Deaths")
+
+ggplotly(interact_high_first)
+
 #High Population Deaths 1996 
 p_high_first <- all_high_first %>%
   group_by(country) %>% 
@@ -808,10 +820,27 @@ interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1
 
 ggplotly(interact_high_first)
 
-#High Population Deaths 1996 
+#High Population Deaths 2001
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_01, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
 
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="2001 Deaths")
 
+ggplotly(interact_high_first)
 
+#High Population Deaths 2006
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_06, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="2006 Deaths")
+
+ggplotly(interact_high_first)
 
 #Low Population Deaths 1996-2006
 p_low_first <- all_low_first %>%
@@ -825,11 +854,38 @@ interact_low_first<- p_low_first + labs(title="Low Populated Countries", x="1996
 
 ggplotly(interact_low_first)
 
+#Low Population Deaths 1996 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_96, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
 
-#Joined all 
-#X - year 
-# Avg total deaths 
-# color by continent 
+interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+
+ggplotly(interact_low_first)
+
+#Low Population Deaths 2001 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_01, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
+
+interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+
+ggplotly(interact_low_first)
+
+#Low Population Deaths 2006 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_06, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
+
+interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+
+ggplotly(interact_low_first)
 ```
 
 *** 
