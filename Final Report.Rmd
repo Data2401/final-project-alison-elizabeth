@@ -4,7 +4,8 @@ author: "Alison Cheek & Elizabeth Bekele"
 date: '2022-05-06'
 output: html_document
 ---
-We were excited to do our report over this data because it was relatively tidy and had quite a few categorical variables and options for additional columns to graph.
+In our initial discussion over choosing a topic for our project, we narrowed it down to environmental-related data because we were interested in seeing possible trends over time and the vast quantity of environmental data is available.
+
 
 
 # Introduction 
@@ -37,6 +38,8 @@ options(scipen=T)
 
 
 # Deaths Data
+We were excited to do our report over this data because it was relatively tidy and had quite a few categorical variables and options for additional columns to graph. 
+
 * Deaths from pollution:
   + Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
   + Author: Akshat Giri
