@@ -1113,12 +1113,14 @@ Let's reintroduce a graph we looked at earlier. Instead this time we will combin
 #Plot High Population
 h_pollutant<- ggplot(high_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
   geom_point() +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   ggtitle("High Population Pollutant Type Death Counts")
 ggplotly(h_pollutant)
 
 #Plot Low Population
 l_pollutant<- ggplot(low_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
   geom_point() +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
   ggtitle("Low Population Pollutant Type Death Counts")
 ggplotly(l_pollutant)
 ```
