@@ -797,17 +797,21 @@ Let's graph the previous tables!
 
 The first decade 1996-2006.
 ```{r, echo=FALSE}
-#High Population Deaths 1996-2006 
+#High Population Deaths 1996 
 p_high_first <- all_high_first %>%
   group_by(country) %>% 
-  ggplot(aes(x= High_Deaths_96, y= High_Deaths_01, color= High_Deaths_06)) +
+  ggplot(aes(x= country, y= High_Deaths_96, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
-  geom_point() +
-  facet_wrap(~country)
+  geom_col(position = 'dodge')
 
-interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths", y="2001 Deaths")
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths")
 
 ggplotly(interact_high_first)
+
+#High Population Deaths 1996 
+
+
+
 
 #Low Population Deaths 1996-2006
 p_low_first <- all_low_first %>%
