@@ -45,12 +45,13 @@ We were excited to do our report over this data because it was relatively tidy a
   + Author: Akshat Giri
   + Last update: 2 years ago
   
+Our deaths due to air pollution data set was from Kaggle. The author is Akshat Giri and was last updated 2 years ago so it’s pretty relevant. When we first loaded in the data some of the column names were lengthy so we shortened them to: country, acronym, year, total deaths, indoor deaths, outdoor deaths, and ozone deaths.
+  
 Import the deaths-due-to-air-pollution data
 ```{r}
 deaths_df_old <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
 glimpse(deaths_df_old)
 ```
-Fixed: use rename instead of colnames
 
 We are going to rename a few of the columns and glimpse the data
 ```{r}
@@ -68,12 +69,16 @@ Variables that interest us here include:
   + Wood
   + Crop waste, dung
   + Charcoal, coal
-* __outdoor_deaths__: Outdoor air or ambient air are emissions caused by combustion processes from motor vehicles, solid fuel burning and industry 
+  This method of cooking is commonly seen in underdeveloped countries.
+* __outdoor_deaths__: Outdoor air or ambient air are emissions caused by combustion processes from motor vehicles, solid-fuel burning and industries
   + Ozone (O3)
   + Particulate matter (PM10 and PM2.5)
   + Nitrogen dioxide (NO2)
   + Carbon monoxide (CO)
   + Sulfur dioxide (SO2)
+
+The data set takes a closer look at deaths caused by the ozone itself which is considered a component of outdoor air pollution.
+
 * __ozone_deaths__: Ozone is a gas that occurs both in Earth's upper atmosphere and at ground level. Ozone in the atmosphere is an important and helpful greenhouse gas, but ground-level ozone is created by extensive use of fossil fuels: 
   + Pollutants emitted by cars
   + Power plants, industrial boilers, refineries, chemical plants
@@ -84,6 +89,7 @@ Variables that interest us here include:
   + Author: Devakumar K. P. 
   + Last update: 2 Years ago
 
+The world population data set is also from Kaggel. The author is Devakumar K. P. and was last updated 2 years ago so it is also recent. From looking at a glimpse of the data set you can see the columns are country name, year, and count which refers to the population at that time
 
 Now, let's take a look at the population data.
 ```{r}
