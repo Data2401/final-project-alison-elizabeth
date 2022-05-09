@@ -836,29 +836,71 @@ ggplotly(interact_low_first)
 
 This shows the second decade 2007-2017.
 ```{r, echo=FALSE}
-#High Population Deaths 2007-2017
-p_high_second <- all_high_second %>%
+#High Population Deaths 2007
+p_high_second_07 <- all_high_second %>%
   group_by(country) %>% 
-  ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= High_Deaths_17)) +
+  ggplot(aes(x= country, y= High_Deaths_07, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
-  geom_point() +
-  facet_wrap(~country)
+  geom_col(position = 'dodge')
 
-interact_high_second<- p_high_second + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
+interact_high_second_07<- p_high_second_07 + labs(title="High Populated Countries", x="2007 Deaths")
 
-ggplotly(interact_high_second)
+ggplotly(interact_high_second_07)
 
-#Low Population Deaths 2007-2017
-p_low_second <- all_low_second %>%
+#High Population Deaths 2012
+p_high_second_12 <- all_high_second %>%
   group_by(country) %>% 
-  ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= Low_Deaths_17)) +
+  ggplot(aes(x= country, y= High_Deaths_12, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
-  geom_point() +
-  facet_wrap(~country)
+  geom_col(position = 'dodge')
 
-interact_low_second<- p_low_second + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
+interact_high_second_12<- p_high_second_12 + labs(title="High Populated Countries", x="2012 Deaths")
 
-ggplotly(interact_low_second)
+ggplotly(interact_high_second_12)
+
+#High Population Deaths 2017
+p_high_second_17 <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_17, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position = 'dodge')
+
+interact_high_second_17<- p_high_second_17 + labs(title="High Populated Countries", x="2017 Deaths")
+
+ggplotly(interact_high_second_17)
+
+#Low Population Deaths 2007
+p_low_second_07 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_07, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position='dodge')
+
+interact_low_second_07<- p_low_second_07 + labs(title="Low Populated Countries", x="2007 Deaths")
+
+ggplotly(interact_low_second_07)
+
+#Low Population Deaths 2012
+p_low_second_12 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_12, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position='dodge')
+
+interact_low_second_12<- p_low_second_12 + labs(title="Low Populated Countries", x="2012 Deaths")
+
+ggplotly(interact_low_second_12)
+         
+#Low Population Deaths 2017
+p_low_second_17 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_17, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_col(position='dodge')
+
+interact_low_second_17<- p_low_second_17 + labs(title="Low Populated Countries", x="2017 Deaths")
+
+ggplotly(interact_low_second_17)
 
 ```
 
