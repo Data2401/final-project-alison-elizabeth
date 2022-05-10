@@ -110,13 +110,9 @@ ggplotly(d)
 This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
 
 ***
-We selected a high population from each continent and used the formula below to determine the low population.
+We selected a high-population and a low-population country from each continent, but we wanted a consistent variation between our selection of low and high population countries. So, we came up with a formula for calculating what the low-population country should be by multiplying the high-population country by .10. For example, when we chose the U.S (which had a population of 331002651 at the time the data was recorded), we multiplied this number by .10 to get 33100265.1 and find the country whose population most-closesly matched (in this case it was Canada with 37742154).
 
-Low population = high population * .10
-  
-  - We wanted to have a consistent variation between our selection of low and high populated countries. 
-  - Based on our calculation we selected the low populated country that was closest to 10% of the high populated country.
-  - EX: U.S (high populated) = 331002651. If we multiply by .10 we get 33100265.1 and Canada (low populated) was a population of 37742154 which was closest to 10% of the US population in 2020
+We purposefully left out countries whose population numbers were higher than the majority because we didn't want those countries to skew the data (Russia, India, and China).
   
 ```{r, echo=FALSE}
 #selecting high-population countries from the world population data frame 
@@ -144,6 +140,16 @@ kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 
 
 ```
+
+Continents:
+
+North America: U.S, Canada
+South America: Brazil, Chile
+Africa: Nigeria, Malawi
+Europe: Germany, Serbia
+Asia: Pakistan, Sri Lanka
+Oceania: Australia, New Zealand
+
 
 
 # Combine Data Sets
@@ -190,7 +196,7 @@ kable(head(list(joined_high[1:22,], joined_low[1:22,])))
 
 ***
 
-Combine the data based on continent.
+We also looked at how the data varied by continent.
 
 ```{r}
 joined_all <- right_join(deaths_df, world_pop, by=c('country' = 'Country.Name', 'year' = 'Year'))
@@ -237,7 +243,7 @@ pop_low_growth<- ggplot(data=joined_low, aes(x=year, y=Count, color=country)) +
 ggplotly(pop_low_growth)
 ```
 
-
+This graph shows the population change over time. Something to note is Germany and Australia's line seem relatively flat, but a closer look will determine there is a gradual increase that is drastically slower than the other countries.
 
 
 ```{r, echo=FALSE}
@@ -253,6 +259,8 @@ ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/
   xlab("Year")+
   ylab("Population")
 ```
+These graphs are of the same information but we have added the percentage of air-pollution related deaths as the width of the line to demonstrate visually if deaths increased or decreased over time. It is easier to see in the high-populated countries but air-pollution related deaths do decrease over time.
+
 
 # Death Count
 > Which country has the highest average death count?
