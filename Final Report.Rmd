@@ -1099,7 +1099,7 @@ ggplotly(interact_low_second_17)
 
 > By comparing each pollutant type, we can determine which year and country had the highest numbers of deaths 
 
-Indoor Deaths
+Let's focus on Indoor Deaths first:
 ```{r, echo=FALSE}
 #Indoor 1997-2017
 indoor_high<- deaths_df %>% 
@@ -1124,7 +1124,7 @@ indoor_low<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(indoor_low)
 
-#Pakistan and Malawi were both mainly affected in 1996
+
 indoor_top<- deaths_df %>% 
     filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
   group_by(country, year, indoor_deaths) %>% 
@@ -1135,6 +1135,7 @@ indoor_top<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(indoor_top)
 ```
+It is interesting to see the decrease in both the high and low-populated countries over time. It is easier to see the difference in Malawi's indoor deaths. Pakistan and Malawi were the two countries with the highest indoor death count in our subset. Despite being a low-populated country, Malwai had much larger death counts.
 
 ***
 
