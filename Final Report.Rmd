@@ -143,12 +143,12 @@ kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
 
 Continents:
 
-North America: U.S, Canada
-South America: Brazil, Chile
-Africa: Nigeria, Malawi
-Europe: Germany, Serbia
-Asia: Pakistan, Sri Lanka
-Oceania: Australia, New Zealand
+  + North America: U.S, Canada
+  + South America: Brazil, Chile
+  + Africa: Nigeria, Malawi
+  + Europe: Germany, Serbia
+  + Asia: Pakistan, Sri Lanka
+  + Oceania: Australia, New Zealand
 
 
 
@@ -179,7 +179,7 @@ kable(head(list(high_pop_death[1:22,], low_pop_death[1:22,])))
 ```
 ***
 
-Lastly, we will join the population and and deaths with its respected country.
+Lastly, we will join the population and and deaths with its respected country. The last column displays the 'Count' which represents the population of that country at that time period.
 
 ```{r, message=FALSE, echo=FALSE}
 #Combined High Population with Pollution Death
@@ -201,22 +201,40 @@ We also looked at how the data varied by continent.
 ```{r}
 joined_all <- right_join(deaths_df, world_pop, by=c('country' = 'Country.Name', 'year' = 'Year'))
 head(joined_all)
+```
 
+North America
+```{r}
 north_america <- joined_all %>% filter(country %in% c("United States", "Canada"))
 head(na.omit(north_america))
+```
 
+South America 
+```{r}
 south_america <- joined_all %>% filter(country %in% c("Brazil", "Chile"))
 head(na.omit(south_america))
+```
 
+Africa
+```{r}
 africa <- joined_all %>% filter(country %in% c("Nigeria", "Malawi"))
 head(na.omit(africa))
+```
 
+Europe
+```{r}
 europe <- joined_all %>% filter(country %in% c("Germany", "Serbia"))
 head(na.omit(europe))
+```
 
+Asia
+```{r}
 asia <- joined_all %>% filter(country %in% c("Pakistan", "Sri Lanka"))
 head(na.omit(asia))
+```
 
+Oceania
+```{r}
 oceania <- joined_all %>% filter(country %in% c("Australia", "New Zealand"))
 head(na.omit(oceania))
 
@@ -259,6 +277,7 @@ ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/
   xlab("Year")+
   ylab("Population")
 ```
+
 These graphs are of the same information but we have added the percentage of air-pollution related deaths as the width of the line to demonstrate visually if deaths increased or decreased over time. It is easier to see in the high-populated countries but air-pollution related deaths do decrease over time.
 
 
@@ -286,6 +305,7 @@ deaths_lowpop_countries<- deaths_df %>%
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
 ```
+
 We wanted to take a closer look at the death count and see which country has the highest average death count. In the tables we made you can see that Pakistan had the highest average death count at 144.33 for the high populated countries. Malawi had the highest average death count at 147.77 for the low populated countries, which is higher than Pakistan.
 
 > Let's see how this is different from continent to continent 
@@ -416,6 +436,8 @@ So now that we’ve looked at the deaths due to pollution we wanted to see what 
 # Pollution Types
 > Which type of pollution has the greatest number of deaths?
 
+Looking between indoor, outdoor, and ozone pollution deaths, we can see which pollutant-type had the greatest death count. 
+
 ```{r, echo=FALSE, message=FALSE}
 #High Population Pollutant Averages
 high_poll <- deaths_df %>% 
@@ -426,7 +448,10 @@ high_poll <- deaths_df %>%
   arrange(desc(avg_indoor),desc(avg_outdoor),desc(avg_ozone))
 
 kable(high_poll)
+```
+The average indoor-death count is higher than other pollutant types, especially in Pakistan and Nigeria. In all three categories, Pakistan had the highest death count.
 
+```{r}
 #Low Population Pollutant Averages 
 low_poll <- deaths_df %>% 
   group_by(country) %>% 
@@ -437,6 +462,7 @@ low_poll <- deaths_df %>%
 kable(low_poll)
 ```
 
+In the low populated countries, Malawi has a higher average indoor death than that of any of our other selected countries. It is also the highest in all three categories, as well.
 
 ***
 ```{r, echo=FALSE, warning=FALSE}
@@ -457,7 +483,12 @@ l_indoor<- ggplot(low_poll, aes(x=country, y = avg_indoor, cex=5)) +
   xlab("Country")+
   ylab("Average Deaths")
 ggplotly(l_indoor)
+```
+In these graphs, it is much easier to see the discrepancies in the indoor deaths of the countries. Malawi, Pakistan, and Nigeria have dots located high on the graph indicating high death counts.
 
+
+
+```{r}
 # High Outdoor Air Pollution
 h_outdoor <- ggplot(high_poll, aes(x=country, y = avg_outdoor, color = avg_ozone, cex=5)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "violet", aesthetics = "colour") +
@@ -476,6 +507,10 @@ l_outdoor <- ggplot(low_poll, aes(x = country, y= avg_outdoor, color = avg_ozone
   ylab("Average Deaths")
 ggplotly(l_outdoor)
 ```
+
+In these graphs, the outdoor pollution deaths are displayed on the y-axis with the amount of ozone-related deaths indicated by the color gradient. The dots highest-up on the graph have high outdoor-related deaths, and the darker the color of pink indicates a high ozone-related death.
+
+For our high-populated countries, Pakistan had high outdoor-deaths and ozone-deaths while the other high-populated countries were lower in ozone-deaths. In the low-populated countries, Serbia had the highest outdoor and ozone deaths, but Malawi in particular had the greatest ozone deaths.
 
 ***
 
