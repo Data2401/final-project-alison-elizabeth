@@ -1,10 +1,10 @@
 ---
 title: "Final Report"
 author: "Alison Cheek & Elizabeth Bekele"
-date: '2022-05-06'
+date: '2022-05-10'
 output: html_document
 ---
-In our initial discussion over choosing a topic for our project, we narrowed it down to environmental-related data because we were interested in seeing possible trends over time and the vast quantity of environmental data is available.
+In our initial discussion over choosing a topic for our project, we narrowed it down to environmental-related data because we were interested in seeing possible trends over time and the vast quantity of environmental data that is available helped pique our curiosity.
 
 
 
@@ -13,9 +13,11 @@ In our initial discussion over choosing a topic for our project, we narrowed it 
   + Outdoor and indoor air pollution cause chronic pain, respiratory diseases, shortened lifespan
   + Air pollution kills about 7 million people worldwide every year 
   + Hopefully this information can showcase the importance of air pollution and that we should be more mindful about our planet
+ 
+* After selecting our deaths data frame due to air pollution we were able to compile a list of questions to explore
   
-* Overview
-  + We will see how different air pollution types affect the population 
+* Topics of Interest
+  + How different air pollution types affect the population 
   + compare past and present population numbers
   + determine which air pollutant type has the highest associated death rate
 
@@ -1238,13 +1240,7 @@ l_pollutant<- ggplot(low_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozo
 ggplotly(l_pollutant)
 ```
 
-We cannot conclude which is worse. 
-
-* High Populated Countries: 
-  + Outdoor pollution seems to be more detrimental with the exception of two countries in this sample set.
-
-* Low Populated Countries: 
-  + it's half-and-half
+In the high populated countries we can see that 2 countries exhibit higher indoor air pollutant deaths whereas the others depict higher outdoor deaths. In the lower populated countries you can see that half show higher outdoor air pollutant deaths and half show higher indoor air pollutant deaths. Therefore, we cannot conclude which is worse.
 
 # Summary 
 
@@ -1276,7 +1272,15 @@ We cannot conclude which is worse.
     - United States was the second highest amount of deaths among the higher populated countries
     - Pakistan decreased and then slightly increased
 * Which is worse - outdoor or indoor pollution?
-  + Inconclusive
+  + Based on our sample set, it is inconclusive
+  + "According to the EPA (Environmental Protection Agency), however, the levels of indoor air pollutants are often 2 to 5 times higher than outdoor levels, and in some cases these levels can exceed 100 times that of outdoor levels of the same pollutants. In other words, sometimes the air inside can be more harmful than the air outside."
+
+
+There are so many factors affecting environmental data, another area of interest would be to look into the cultural, geographical, and historical climate of the country to see if any significant events occurred to skew the numbers during those years where great increases and decreases occurred. 
+
+To make the data more manageable we had to reduce the number of countries we looked at. This is why we selected one high populated country and one low populated country from each continent. We thought having a high and low populated country would give us a general idea on how air pollution affected each continent. Furthermore, we excluded Russia, China, and India because their populations were significantly large and wouldn't be a good representation of the average populations.
+
+Overall this project has sparked interest in environmental concerns. After seeing the impact we have in our environment's air pollution we are prone to be more conscious of how we treat our planet. We hope that this data has brought more awareness to others as well!
 
 # Sources
 * [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017 ]
