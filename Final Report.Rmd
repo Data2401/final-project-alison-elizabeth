@@ -286,6 +286,7 @@ deaths_lowpop_countries<- deaths_df %>%
 kable(list(deaths_highpop_countries, deaths_lowpop_countries))
 
 ```
+We wanted to take a closer look at the death count and see which country has the highest average death count. In the tables we made you can see that Pakistan had the highest average death count at 144.33 for the high populated countries. Malawi had the highest average death count at 147.77 for the low populated countries, which is higher than Pakistan.
 
 > Let's see how this is different from continent to continent 
 
@@ -332,6 +333,8 @@ kable(deaths_oceania, caption = "Oceania Average Death Count")
 ```
 
 
+When we look at the average death count based on continent we can see that overall Oceania countries had the least amount of deaths. On average Australia had an average death count of roughly 17.8 and New Zealand had an average death count of 15.9. Whereas Africa countries had the most amount of deaths. On average Malawi had an average of 147.8 and Nigeria had an average of 112.3. 
+
 
 ***
 
@@ -358,6 +361,10 @@ l <- ggplot(deaths_lowpop_countries)+
 
 ggplotly(l)
 ```
+
+To get a better visualization we created a bar graph of the average deaths in both the high and low populated countries. In this high-population graph you can see that Pakistan is at the highest and Australia is at the lowest. In the low-population graph you can see that Malawi is at the highest and New Zealand is at the lowest. 
+
+
 
 *** 
 So we've looked at the deaths due to pollution, but what percentage of the population was affected?
@@ -401,6 +408,8 @@ percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = co
   ylab("Percent (total_deaths/average pop)")
 ggplotly(percent_low)
 ```
+
+So now that we’ve looked at the deaths due to pollution we wanted to see what percentage of the population was actually affected by this. At the top we have a table depicting the average populations in both the high and low populated countries. You can see for the high populated countries that Pakistan is in the lead with 12.1% and for the low populated countries Malawi is in the lead with 130.9%.
 
 
 
