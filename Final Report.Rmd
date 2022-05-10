@@ -1,5 +1,5 @@
 ---
-title: "Final Report"
+title: "Final Report: Air Pollution Deaths"
 author: "Alison Cheek & Elizabeth Bekele"
 date: '2022-05-10'
 output: html_document
