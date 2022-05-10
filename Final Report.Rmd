@@ -519,6 +519,9 @@ For our high-populated countries, Pakistan had high outdoor-deaths and ozone-dea
 
 > has there been a change?
 
+To see if there's been a change over time we looked at 2 decades. The first decade was from 1996-2006. Here we can see that there’s a general decrease in both high and low populated countries over the years even though some countries have a higher death count than others, such as Nigeria, Pakistan, Malawi, and Tonga.
+
+
 This is the first decade 1996-2006
 ```{r, echo=FALSE, message=FALSE}
 # Look at the trend of deaths within the last decade from low and high populated countries
@@ -573,6 +576,8 @@ kable(list(all_high_first))
 kable(list(all_low_first))
 ```
 ***
+
+The second decade was from 2007-2017 and there is still a decrease in both high and low populated countries over the years. You can also see that the death counts in the second decade are lower than the death counts in the first decade. If you look at Pakistan you can see the death count started with 155.4 in 1996 and went down to 143.8 in 2007.
 
 This is the second decade 2007-2017
 ```{r, echo=FALSE, message=FALSE}
@@ -852,11 +857,17 @@ oceania_17 <- na.omit(oceania)  %>%
 
 kable(list(oceania_07,oceania_12,oceania_17), caption = "Oceania Deaths 2007-2017")
 ```
+
+Based on these tables, we can see that Oceania countries had the lowest death counts over time across both decades. In Europe, although Germany is a high-populated country its death count was significantly less than Serbia, a low-populated country. This was similarly seen in Africa, where Malawi, a low-populated country, had a higher death count overall in comparison to Nigeria, a high-populated country. In Africa, there was the greatest amount of decrease in their average death count. Malawi decreased roughly 4,600,000 from 1996 to 2006.
+
+
 ***
 
 Let's graph the previous tables!
 
-The first decade 1996-2006.
+In the first graph we faceted the high-populated countries and look at the average death count in 1996 on the x-axis, the average death count in 2001 on the y-axis, and color the points by the average death count in 2006. The darker the points are the higher the death count was in 2006. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 1996, 2001, and 2006. 
+
+High Population first decade (1996-2006).
 ```{r, echo=FALSE}
 #High Population Deaths 1996-2006
 p_high_first <- all_high_first %>%
@@ -875,9 +886,11 @@ p_high_first <- all_high_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_96, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+   xlab("Country")+
+  ylab("1996 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths")
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
 
 ggplotly(interact_high_first)
 
@@ -886,9 +899,11 @@ p_high_first <- all_high_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_01, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2001 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_first<- p_high_first + labs(title="High Populated Countries", x="2001 Deaths")
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
 
 ggplotly(interact_high_first)
 
@@ -897,12 +912,21 @@ p_high_first <- all_high_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_06, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2006 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_first<- p_high_first + labs(title="High Populated Countries", x="2006 Deaths")
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
 
 ggplotly(interact_high_first)
+```
 
+***
+
+In the first graph we faceted the low-populated countries and look at the average death count in 1996 on the x-axis, the average death count in 2001 on the y-axis, and color the points by the average death count in 2006. The darker the points are the higher the death count was in 2006. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 1996, 2001, and 2006.
+
+Low Population first decade (1996-2006).
+```{r}
 #Low Population Deaths 1996-2006
 p_low_first <- all_low_first %>%
   group_by(country) %>% 
@@ -920,9 +944,11 @@ p_low_first <- all_low_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_96, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("1996 Deaths")+
   geom_col(position = 'dodge')
 
-interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_first)
 
@@ -931,9 +957,11 @@ p_low_first <- all_low_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_01, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2001 Deaths")+
   geom_col(position = 'dodge')
 
-interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_first)
 
@@ -942,16 +970,20 @@ p_low_first <- all_low_first %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_06, fill = country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2006 Deaths")+
   geom_col(position = 'dodge')
 
-interact_low_first<- p_low_first + labs(title="High Populated Countries", x="1996 Deaths")
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_first)
 ```
 
 *** 
 
-This shows the second decade 2007-2017.
+In the first graph we faceted the high-populated countries and look at the average death count in 2007 on the x-axis, the average death count in 2012 on the y-axis, and color the points by the average death count in 2017. The darker the points are the higher the death count was in 2017. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 2007, 2012, and 2017. 
+
+High Population second decade (2007-2017).
 ```{r, echo=FALSE}
 #High Population Deaths 2007-2017
 p_high_second <- all_high_second %>%
@@ -961,7 +993,7 @@ p_high_second <- all_high_second %>%
   geom_point() +
   facet_wrap(~country)
 
-interact_high_second<- p_high_second + labs(title="High Populated Countries", x="2007 Deaths", y="2017 Deaths")
+interact_high_second<- p_high_second + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
 ggplotly(interact_high_second)
 
@@ -970,9 +1002,11 @@ p_high_second_07 <- all_high_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_07, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2007 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_second_07<- p_high_second_07 + labs(title="High Populated Countries", x="2007 Deaths")
+interact_high_second_07<- p_high_second_07 + labs(title="High Populated Countries")
 
 ggplotly(interact_high_second_07)
 
@@ -981,9 +1015,11 @@ p_high_second_12 <- all_high_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_12, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2012 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_second_12<- p_high_second_12 + labs(title="High Populated Countries", x="2012 Deaths")
+interact_high_second_12<- p_high_second_12 + labs(title="High Populated Countries")
 
 ggplotly(interact_high_second_12)
 
@@ -992,12 +1028,20 @@ p_high_second_17 <- all_high_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= High_Deaths_17, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2017 Deaths")+
   geom_col(position = 'dodge')
 
-interact_high_second_17<- p_high_second_17 + labs(title="High Populated Countries", x="2017 Deaths")
+interact_high_second_17<- p_high_second_17 + labs(title="High Populated Countries")
 
 ggplotly(interact_high_second_17)
+```
 
+***
+In the first graph we faceted the low-populated countries and look at the average death count in 2007 on the x-axis, the average death count in 2012 on the y-axis, and color the points by the average death count in 2017. The darker the points are the higher the death count was in 2017. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 2007, 2012, and 2017. 
+
+Low Population second decade (2007-2017)
+```{r}
 #Low Population Deaths 2007-2017
 p_low_second <- all_low_second %>%
   group_by(country) %>% 
@@ -1006,7 +1050,7 @@ p_low_second <- all_low_second %>%
   geom_point() +
   facet_wrap(~country)
 
-interact_low_second<- p_low_second + labs(title="Low Populated Countries", x="2007 Deaths", y="2017 Deaths")
+interact_low_second<- p_low_second + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
 
 ggplotly(interact_low_second)
 
@@ -1015,9 +1059,11 @@ p_low_second_07 <- all_low_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_07, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2007 Deaths")+
   geom_col(position='dodge')
 
-interact_low_second_07<- p_low_second_07 + labs(title="Low Populated Countries", x="2007 Deaths")
+interact_low_second_07<- p_low_second_07 + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_second_07)
 
@@ -1026,9 +1072,11 @@ p_low_second_12 <- all_low_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_12, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2012 Deaths")+
   geom_col(position='dodge')
 
-interact_low_second_12<- p_low_second_12 + labs(title="Low Populated Countries", x="2012 Deaths")
+interact_low_second_12<- p_low_second_12 + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_second_12)
          
@@ -1037,9 +1085,11 @@ p_low_second_17 <- all_low_second %>%
   group_by(country) %>% 
   ggplot(aes(x= country, y= Low_Deaths_17, fill=country)) +
   scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2017 Deaths")+
   geom_col(position='dodge')
 
-interact_low_second_17<- p_low_second_17 + labs(title="Low Populated Countries", x="2017 Deaths")
+interact_low_second_17<- p_low_second_17 + labs(title="Low Populated Countries")
 
 ggplotly(interact_low_second_17)
 
