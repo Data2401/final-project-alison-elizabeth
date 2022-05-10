@@ -1135,11 +1135,12 @@ indoor_top<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(indoor_top)
 ```
+
 It is interesting to see the decrease in both the high and low-populated countries over time. It is easier to see the difference in Malawi's indoor deaths. Pakistan and Malawi were the two countries with the highest indoor death count in our subset. Despite being a low-populated country, Malwai had much larger death counts.
 
 ***
 
-Outdoor Deaths
+Outdoor Deaths: 
 ```{r, echo= FALSE}
 #Outdoor Particulate 1997-2017
 outdoor_high<- deaths_df %>% 
@@ -1164,8 +1165,6 @@ outdoor_low<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(outdoor_low)
 
-#Serbia and Pakistan were the top countries affected. 
-#2011 Pakistan had the greatest amount of Outdoor Deaths
 outdoor_top<- deaths_df %>% 
     filter(year> 1995 & country %in% c('Pakistan', 'Serbia')) %>% 
   group_by(country, year, outdoor_deaths) %>% 
@@ -1176,6 +1175,8 @@ outdoor_top<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(outdoor_top)
 ```
+
+For outdoor deaths you can see that for high populated countries Pakistan is in the lead. There tends to be an interesting increase in Nigeria from 2014-2015. Also Germany and the United States are very neck in neck over the years. In the lower populated countries you can see that Serbia is in the lead. Sri Lanka does have a steep decline from 2015 to 2016 but before that it was really close with Tonga. When you look at the top 2 countries, Pakistan and Serbia, you can see that Pakistan is drastically higher.  2011 was the greatest number of deaths for Pakistan. 1997 was the greatest number of deaths for Serbia
 
 ***
 Ozone Deaths 
