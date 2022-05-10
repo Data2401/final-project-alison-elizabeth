@@ -1218,7 +1218,7 @@ ozone_top<- deaths_df %>%
   ylab("Deaths per 100,000")
 ggplotly(ozone_top)
 ```
-
+In the high-populated countries, the U.S. is the second-highest in ozone-related deaths and even increases over some years. We also see an increase in deaths in Pakistan, Chile, and Sri Lanka. Malawi is still one of the highest countries for ozone-related deaths, even though it saw the most decrease over time.
 
 # Which is worse? 
 > outdoor or indoor pollution?
