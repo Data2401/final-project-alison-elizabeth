@@ -1,0 +1,1299 @@
+---
+title: "Final Report: Air Pollution Deaths"
+author: "Alison Cheek & Elizabeth Bekele"
+date: '2022-05-10'
+output: html_document
+---
+In our initial discussion over choosing a topic for our project, we narrowed it down to environmental-related data because we were interested in seeing possible trends over time and the vast quantity of environmental data that is available helped pique our curiosity.
+
+
+
+# Introduction 
+* Air pollution can be detrimental to both our health and the climate
+  + Outdoor and indoor air pollution cause chronic pain, respiratory diseases, shortened lifespan
+  + Air pollution kills about 7 million people worldwide every year 
+  + Hopefully this information can showcase the importance of air pollution and that we should be more mindful about our planet
+ 
+* After selecting our deaths data frame due to air pollution we were able to compile a list of questions to explore
+  
+* Topics of Interest
+  + How different air pollution types affect the population 
+  + compare past and present population numbers
+  + determine which air pollutant type has the highest associated death rate
+
+
+# Packages Required 
+```{r, message=FALSE, warning=FALSE}
+#This will allow us to filter through our data 
+library(tidyverse)
+library(dplyr)
+#This will help us plot figures to showcase our findings
+library(ggplot2)
+#This will help us organize and display our data as necessary 
+library(knitr)
+library(kableExtra)
+#This expands our plot uses 
+library(plotly)
+#Scientific Notation Disabled 
+options(scipen=T)
+```
+
+
+# Deaths Data
+We were excited to do our report over this data because it was relatively tidy and had quite a few categorical variables and options for additional columns to graph. 
+
+* Deaths from pollution:
+  + Kaggle: [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017] 
+  + Author: Akshat Giri
+  + Last update: 2 years ago
+  
+Our deaths due to air pollution data set was from Kaggle. The author is Akshat Giri and was last updated 2 years ago so it’s pretty relevant. When we first loaded in the data some of the column names were lengthy so we shortened them to: country, acronym, year, total deaths, indoor deaths, outdoor deaths, and ozone deaths.
+  
+Import the deaths-due-to-air-pollution data
+```{r}
+deaths_df_old <- data.frame(read.csv("death-rates-from-air-pollution.csv"))
+glimpse(deaths_df_old)
+```
+
+We are going to rename a few of the columns and glimpse the data
+```{r}
+deaths_df<- deaths_df_old %>% rename(country=Entity, acronym=Code, year=Year, total_deaths=Air.pollution..total...deaths.per.100.000., indoor_deaths=Indoor.air.pollution..deaths.per.100.000., outdoor_deaths=Outdoor.particulate.matter..deaths.per.100.000., ozone_deaths=Outdoor.ozone.pollution..deaths.per.100.000.)
+
+glimpse(deaths_df)
+```
+
+# Data Variables
+Variables that interest us here include: 
+
+* __country__ 
+* __total_deaths__: per 100,000
+* __indoor_deaths__: Indoor air pollution is considered pollution that occurs in the household. Cooking with solid fuels:
+  + Wood
+  + Crop waste, dung
+  + Charcoal, coal
+  This method of cooking is commonly seen in underdeveloped countries.
+* __outdoor_deaths__: Outdoor air or ambient air are emissions caused by combustion processes from motor vehicles, solid-fuel burning and industries
+  + Ozone (O3)
+  + Particulate matter (PM10 and PM2.5)
+  + Nitrogen dioxide (NO2)
+  + Carbon monoxide (CO)
+  + Sulfur dioxide (SO2)
+
+The data set takes a closer look at deaths caused by the ozone itself which is considered a component of outdoor air pollution.
+
+* __ozone_deaths__: Ozone is a gas that occurs both in Earth's upper atmosphere and at ground level. Ozone in the atmosphere is an important and helpful greenhouse gas, but ground-level ozone is created by extensive use of fossil fuels: 
+  + Pollutants emitted by cars
+  + Power plants, industrial boilers, refineries, chemical plants
+
+# World Population Data 
+* World Population:
+  + Kaggle: [https://www.kaggle.com/datasets/imdevskp/world-population-19602018] 
+  + Author: Devakumar K. P. 
+  + Last update: 2 Years ago
+
+The world population data set is also from Kaggel. The author is Devakumar K. P. and was last updated 2 years ago so it is also recent. From looking at a glimpse of the data set you can see the columns are country name, year, and count which refers to the population at that time
+
+Now, let's take a look at the population data.
+```{r}
+world_pop <- read.csv("population_total_long.csv")
+glimpse(world_pop)
+```
+
+***
+
+To get a general idea of 'deaths-dataframe' we made, let's make a plots to see what's happening. This is a plot of indoor x outdoor deaths around the world by country.
+
+```{r, echo=FALSE}
+d <- ggplot(deaths_df, aes(x = indoor_deaths, y = outdoor_deaths, text = paste0(country, ", ", year) )) + geom_point() +
+  ggtitle("Outdoor Deaths vs Indoor Deaths")
+ggplotly(d)
+```
+
+This is a mess, and so we chose two countries from each continent (a high-population and a low-population country) to graph.
+
+***
+We selected a high-population and a low-population country from each continent, but we wanted a consistent variation between our selection of low and high population countries. So, we came up with a formula for calculating what the low-population country should be by multiplying the high-population country by .10. For example, when we chose the U.S (which had a population of 331002651 at the time the data was recorded), we multiplied this number by .10 to get 33100265.1 and find the country whose population most-closesly matched (in this case it was Canada with 37742154).
+
+We purposefully left out countries whose population numbers were higher than the majority because we didn't want those countries to skew the data (Russia, India, and China).
+  
+```{r, echo=FALSE}
+#selecting high-population countries from the world population data frame 
+high_pop_countries <- world_pop %>% 
+  filter(Year> 1995 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(Year)
+  
+high<- ggplot(high_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+  geom_boxplot()+
+  labs(title="Selection of high-population countries", x="Country", y="Population (in millions)")
+ggplotly(high)
+
+#selecting low-population countries from the world population data frame 
+low_pop_countries <- world_pop %>% 
+  filter(Year> 1995 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  group_by(Year)
+
+low<- ggplot(low_pop_countries, aes(x=Country.Name, y=Count, color=Country.Name))+
+  geom_boxplot()+
+  labs(title="Selection of low-population countries", x="Country", y="Population (in millions)")
+ggplotly(low)
+
+
+kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
+
+
+```
+
+Continents:
+
+  + North America: U.S, Canada
+  + South America: Brazil, Chile
+  + Africa: Nigeria, Malawi
+  + Europe: Germany, Serbia
+  + Asia: Pakistan, Sri Lanka
+  + Oceania: Australia, New Zealand
+
+
+
+# Combine Data Sets
+
+First let's look at a table of the high and low populated countries using the world population data set.
+
+```{r, echo=FALSE}
+kable(head(list(high_pop_countries[1:6,], low_pop_countries[1:6,])))
+```
+***
+
+Next, we are going to see the death count for high and low populated countries using the deaths dataframe.
+
+```{r, echo=FALSE}
+#selecting high-population deaths from death dataframe 
+high_pop_death <- deaths_df %>% 
+  filter(year > 1995 & country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(year)
+
+
+#selecting low-population deaths from death dataframe 
+low_pop_death <- deaths_df %>% 
+  filter(year > 1995 & country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  group_by(year)
+
+kable(head(list(high_pop_death[1:22,], low_pop_death[1:22,])))
+```
+***
+
+Lastly, we will join the population and and deaths with its respected country. The last column displays the 'Count' which represents the population of that country at that time period.
+
+```{r, message=FALSE, echo=FALSE}
+#Combined High Population with Pollution Death
+joined_high <- right_join(high_pop_death, high_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
+
+
+#Combined Low Population with Pollution Death
+joined_low <-right_join(low_pop_death, low_pop_countries, by= c('country' = 'Country.Name', 'year' = 'Year'))
+
+joined_select <- full_join(joined_high, joined_low)
+
+kable(head(list(joined_high[1:22,], joined_low[1:22,])))
+```
+
+***
+
+We also looked at how the data varied by continent.
+
+```{r}
+joined_all <- right_join(deaths_df, world_pop, by=c('country' = 'Country.Name', 'year' = 'Year'))
+head(joined_all)
+```
+
+North America
+```{r}
+north_america <- joined_all %>% filter(country %in% c("United States", "Canada"))
+head(na.omit(north_america))
+```
+
+South America 
+```{r}
+south_america <- joined_all %>% filter(country %in% c("Brazil", "Chile"))
+head(na.omit(south_america))
+```
+
+Africa
+```{r}
+africa <- joined_all %>% filter(country %in% c("Nigeria", "Malawi"))
+head(na.omit(africa))
+```
+
+Europe
+```{r}
+europe <- joined_all %>% filter(country %in% c("Germany", "Serbia"))
+head(na.omit(europe))
+```
+
+Asia
+```{r}
+asia <- joined_all %>% filter(country %in% c("Pakistan", "Sri Lanka"))
+head(na.omit(asia))
+```
+
+Oceania
+```{r}
+oceania <- joined_all %>% filter(country %in% c("Australia", "New Zealand"))
+head(na.omit(oceania))
+
+```
+
+
+***
+
+This is a closer view on the population growth over time in both the high and low populated countries that we selected.
+
+```{r, echo=FALSE}
+pop_high_growth<- ggplot(data=joined_high, aes(x=year, y=Count, color=country)) +
+  geom_line() +
+  labs(title="Population Over Time in High Populated Countries")+
+  xlab("Year")+
+  ylab("Population")
+ggplotly(pop_high_growth)
+
+pop_low_growth<- ggplot(data=joined_low, aes(x=year, y=Count, color=country)) +
+  geom_line() +
+  labs(title="Population Over Time in Low Populated Countries")+
+  xlab("Year")+
+  ylab("Population")
+ggplotly(pop_low_growth)
+```
+
+This graph shows the population change over time. Something to note is Germany and Australia's line seem relatively flat, but a closer look will determine there is a gradual increase that is drastically slower than the other countries.
+
+
+```{r, echo=FALSE}
+ggplot(data=joined_high, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
+  geom_line() +
+  labs(title="Percentage of Death Count in High Population Countries", subtitle="Bar width is equal to percentage of Deaths")+
+  xlab("Year")+
+  ylab("Population")
+
+ggplot(data=joined_low, aes(x=year, y=Count, color=country, size = total_deaths/Count)) +
+  geom_line() +
+  labs(title="Percentage of Death Count in Low Population Countries", subtitle="Bar width is equal to percentage of Deaths")+
+  xlab("Year")+
+  ylab("Population")
+```
+
+These graphs are of the same information but we have added the percentage of air-pollution related deaths as the width of the line to demonstrate visually if deaths increased or decreased over time. It is easier to see in the high-populated countries but air-pollution related deaths do decrease over time.
+
+
+# Death Count
+> Which country has the highest average death count?
+
+Let's make a table depicting the high and low populated countries and their respected death count due to pollution.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Mean total deaths of high-population countries
+deaths_highpop_countries <- deaths_df %>% 
+  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(hp_average_death = mean(total_deaths))
+
+#Mean total deaths of high-population countries
+deaths_lowpop_countries<- deaths_df %>% 
+  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  group_by(country) %>% 
+  select(total_deaths) %>% 
+  summarize(lp_average_death = mean(total_deaths))
+
+#Side-by-side Table to view deaths 
+kable(list(deaths_highpop_countries, deaths_lowpop_countries))
+
+```
+
+We wanted to take a closer look at the death count and see which country has the highest average death count. In the tables we made you can see that Pakistan had the highest average death count at 144.33 for the high populated countries. Malawi had the highest average death count at 147.77 for the low populated countries, which is higher than Pakistan.
+
+> Let's see how this is different from continent to continent 
+
+```{r}
+#Mean total deaths for each continent
+deaths_north <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  summarize(north_america_deaths = mean(total_deaths))
+
+
+deaths_south <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  summarize(south_america_deaths = mean(total_deaths))
+
+
+deaths_africa <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  summarize(africa_deaths = mean(total_deaths))
+
+
+deaths_europe <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  summarize(europe_deaths = mean(total_deaths))
+
+
+deaths_asia <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  summarize(asia_deaths = mean(total_deaths))
+
+
+deaths_oceania <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  summarize(oceania_deaths = mean(total_deaths))
+
+
+#Table to view continent deaths 
+kable(deaths_north, caption = "North America Average Death Count")
+kable(deaths_south, caption = "South America Average Death Count")
+kable(deaths_africa, caption = "Africa Average Death Count")
+kable(deaths_asia, caption = "Asia Average Death Count")
+kable(deaths_europe, caption = "Europe Average Death Count")
+kable(deaths_oceania, caption = "Oceania Average Death Count")
+
+```
+
+
+When we look at the average death count based on continent we can see that overall Oceania countries had the least amount of deaths. On average Australia had an average death count of roughly 17.8 and New Zealand had an average death count of 15.9. Whereas Africa countries had the most amount of deaths. On average Malawi had an average of 147.8 and Nigeria had an average of 112.3. 
+
+
+***
+
+Here's a graph to clearly visualize the previous table
+
+```{r, echo=FALSE, message=FALSE}
+#Plot High Population Deaths (average)
+h<- ggplot(deaths_highpop_countries)+
+  geom_col(mapping = aes(x=country, y=hp_average_death, fill=country))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average deaths in high-population countries")+
+  coord_flip()
+
+ggplotly(h)
+
+#Plot of Low Population Deaths (average)
+l <- ggplot(deaths_lowpop_countries)+
+  geom_col(mapping = aes(x=country, y=lp_average_death, fill=country))+
+             xlab("Country")+
+             ylab("Average deaths (per 100,000)")+
+             ggtitle("Average deaths in low-population countries")+
+  coord_flip()
+
+ggplotly(l)
+```
+
+To get a better visualization we created a bar graph of the average deaths in both the high and low populated countries. In this high-population graph you can see that Pakistan is at the highest and Australia is at the lowest. In the low-population graph you can see that Malawi is at the highest and New Zealand is at the lowest. 
+
+
+
+*** 
+So we've looked at the deaths due to pollution, but what percentage of the population was affected?
+
+In order to get rid of the leading zeros, and clean up the y-axis, we multiplied the 'percent_high' and 'percent_low' by 100,000 since the data was per 100,000 when calculating deaths.
+
+```{r, echo=FALSE, message=FALSE}
+hp_countries_population <- world_pop %>% 
+  filter(Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia'), Year > 1995) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+lp_countries_population <- world_pop %>% 
+  filter(Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'), Year > 1995) %>% 
+  group_by(Country.Name) %>% 
+  select(Count) %>% 
+  summarize(average_population = mean(Count))
+
+#Population Average Table
+kable(list(hp_countries_population, lp_countries_population))
+
+#Percentage of those affected 
+affected_high<- joined_high %>% 
+  mutate(percent_high = (total_deaths/mean(Count))*100000)
+
+percent_high<- affected_high %>% ggplot(aes(x = year, y = percent_high, color = country))+
+  geom_point() +
+  labs(title = "High Population Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/average pop)")
+ggplotly(percent_high)
+
+affected_low <- joined_low %>% 
+  mutate(percent_low = (total_deaths/mean(Count))*100000)
+
+percent_low <- affected_low %>% ggplot(aes(x = year, y = percent_low, color = country))+
+  geom_point() +
+  labs(title = "Low Populated Countries Affected by Air Pollution") +
+  xlab("Year")+
+  ylab("Percent (total_deaths/average pop)")
+ggplotly(percent_low)
+```
+
+So now that we’ve looked at the deaths due to pollution we wanted to see what percentage of the population was actually affected by this. At the top we have a table depicting the average populations in both the high and low populated countries. You can see for the high populated countries that Pakistan is in the lead with 12.1% and for the low populated countries Malawi is in the lead with 130.9%.
+
+
+
+# Pollution Types
+> Which type of pollution has the greatest number of deaths?
+
+Looking between indoor, outdoor, and ozone pollution deaths, we can see which pollutant-type had the greatest death count. 
+
+```{r, echo=FALSE, message=FALSE}
+#High Population Pollutant Averages
+high_poll <- deaths_df %>% 
+  group_by(country) %>% 
+  filter(country %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  select(country, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths)) %>% 
+  arrange(desc(avg_indoor),desc(avg_outdoor),desc(avg_ozone))
+
+kable(high_poll)
+```
+The average indoor-death count is higher than other pollutant types, especially in Pakistan and Nigeria. In all three categories, Pakistan had the highest death count.
+
+```{r}
+#Low Population Pollutant Averages 
+low_poll <- deaths_df %>% 
+  group_by(country) %>% 
+  filter(country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand')) %>% 
+  select(country, indoor_deaths, outdoor_deaths, ozone_deaths) %>% 
+  summarize(avg_indoor = mean(indoor_deaths), avg_outdoor = mean(outdoor_deaths), avg_ozone = mean(ozone_deaths))
+
+kable(low_poll)
+```
+
+In the low populated countries, Malawi has a higher average indoor death than that of any of our other selected countries. It is also the highest in all three categories, as well.
+
+***
+```{r, echo=FALSE, warning=FALSE}
+
+#Plot High Population
+# High Indoor Air Pollution
+h_indoor<- ggplot(high_poll, aes(x=country, y = avg_indoor, cex=5)) + 
+  geom_point() +
+  ggtitle("Indoor Air Pollution Deaths in High Population Countries")+
+  xlab("Country")+
+  ylab("Average Deaths")
+ggplotly(h_indoor)
+
+#Low Indoor Air Pollution
+l_indoor<- ggplot(low_poll, aes(x=country, y = avg_indoor, cex=5)) + 
+  geom_point() +
+  ggtitle("Indoor Air Pollution Deaths in Low Population Countries")+
+  xlab("Country")+
+  ylab("Average Deaths")
+ggplotly(l_indoor)
+```
+In these graphs, it is much easier to see the discrepancies in the indoor deaths of the countries. Malawi, Pakistan, and Nigeria have dots located high on the graph indicating high death counts.
+
+
+
+```{r}
+# High Outdoor Air Pollution
+h_outdoor <- ggplot(high_poll, aes(x=country, y = avg_outdoor, color = avg_ozone, cex=5)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "violet", aesthetics = "colour") +
+  geom_point() +
+  labs(title = "Outdoor Air Pollution Deaths in High Population Countries") +
+  xlab("Country") + 
+  ylab("Average Deaths")
+ggplotly(h_outdoor)
+
+#Low Outdoor Air Pollution
+l_outdoor <- ggplot(low_poll, aes(x = country, y= avg_outdoor, color = avg_ozone, cex=5)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "violet", aesthetics = "colour") +
+  geom_point() +
+  labs(title = "Outdoor Air Pollution Deaths in Low Population Countries")+
+  xlab("Country")+
+  ylab("Average Deaths")
+ggplotly(l_outdoor)
+```
+
+In these graphs, the outdoor pollution deaths are displayed on the y-axis with the amount of ozone-related deaths indicated by the color gradient. The dots highest-up on the graph have high outdoor-related deaths, and the darker the color of pink indicates a high ozone-related death.
+
+For our high-populated countries, Pakistan had high outdoor-deaths and ozone-deaths while the other high-populated countries were lower in ozone-deaths. In the low-populated countries, Serbia had the highest outdoor and ozone deaths, but Malawi in particular had the greatest ozone deaths.
+
+***
+
+# Pollution Over Time 
+> Let's look at the previous two decades and compare the death count
+
+> has there been a change?
+
+To see if there's been a change over time we looked at 2 decades. The first decade was from 1996-2006. Here we can see that there’s a general decrease in both high and low populated countries over the years even though some countries have a higher death count than others, such as Nigeria, Pakistan, Malawi, and Tonga.
+
+
+This is the first decade 1996-2006
+```{r, echo=FALSE, message=FALSE}
+# Look at the trend of deaths within the last decade from low and high populated countries
+death_96_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 1996, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_96 = mean(total_deaths))
+
+death_96_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 1996, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_96 = mean(total_deaths))
+
+death_01_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2001, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_01 = mean(total_deaths))
+
+death_01_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2001, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_01 = mean(total_deaths))
+
+death_06_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2006, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_06 = mean(total_deaths))
+
+death_06_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2006, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_06 = mean(total_deaths))
+
+#cohesive table so it's easier to visualize 
+#Low Population Table 2007-2017
+all_low_first <- death_96_low %>% 
+  mutate(death_01_low) %>% 
+  mutate(death_06_low)
+
+#High Population Table 2007-2017
+all_high_first <- death_96_high %>% 
+  mutate(death_01_high) %>% 
+  mutate(death_06_high)
+
+kable(list(all_high_first))
+kable(list(all_low_first))
+```
+***
+
+The second decade was from 2007-2017 and there is still a decrease in both high and low populated countries over the years. You can also see that the death counts in the second decade are lower than the death counts in the first decade. If you look at Pakistan you can see the death count started with 155.4 in 1996 and went down to 143.8 in 2007.
+
+This is the second decade 2007-2017
+```{r, echo=FALSE, message=FALSE}
+# Look at the trend of deaths within the last decade from low and high populated countries
+death_07_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_07 = mean(total_deaths))
+
+death_07_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2007, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_07 = mean(total_deaths))
+
+death_12_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_12 = mean(total_deaths))
+
+death_12_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2012, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_12 = mean(total_deaths))
+
+death_17_high<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('United States', 'Brazil','Nigeria', 'Germany', 'Pakistan', 'Australia')) %>%
+  select(total_deaths) %>% 
+  summarize(High_Deaths_17 = mean(total_deaths))
+
+death_17_low<- deaths_df %>% 
+  group_by(country) %>% 
+  filter(year == 2017, country %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'Tonga')) %>%
+  select(total_deaths) %>% 
+  summarize(Low_Deaths_17 = mean(total_deaths))
+
+#cohesive table so it's easier to visualize 
+#Low Population Table 2007-2017
+all_low_second <- death_07_low %>% 
+  mutate(death_12_low) %>% 
+  mutate(death_17_low)
+
+#High Population Table 2007-2017
+all_high_second <- death_07_high %>% 
+  mutate(death_12_high) %>% 
+  mutate(death_17_high)
+
+kable(list(all_high_second))
+kable(list(all_low_second))
+```
+
+***
+Let's see if there is variation by continent.
+Here are some tables for the first decade (1996-2006) and second decade (2007-2017) grouped by continent.
+
+```{r}
+#North America 1996-2006
+north_96 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+north_01 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+north_06 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(north_96,north_01,north_06), caption = "North America Deaths 1996-2006")
+
+# North America 2007-2017
+north_07 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+north_12 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+north_17 <- na.omit(north_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(north_07,north_12,north_17), caption = "North America Deaths 2007-2017")
+
+#South America 1996-2006
+south_96 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+south_01 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+south_06 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(south_96,south_01,south_06), caption = "South America Deaths 1996-2006")
+
+# South America 2007-2017
+south_07 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+south_12 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+south_17 <- na.omit(south_america)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(south_07,south_12,south_17), caption = "South America Deaths 2007-2017")
+
+
+# Africa 1996-2006
+africa_96 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+africa_01 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+africa_06 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(africa_96,africa_01,africa_06), caption = "Africa Deaths 1996-2006")
+
+# Africa 2007-2017
+africa_07 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+africa_12 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+africa_17 <- na.omit(africa)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(africa_07,africa_12,africa_17), caption = "Africa Deaths 2007-2017")
+
+#Europe 1996-2006
+europe_96 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+europe_01 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+europe_06 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(europe_96,europe_01,europe_06), caption = "Europe Deaths 1996-2006")
+
+#Europe 2007-2017
+europe_07 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+europe_12 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+europe_17 <- na.omit(europe)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(europe_07,europe_12,europe_17), caption = "Europe Deaths 2007-2017")
+
+
+#Asia 1996-2006
+asia_96 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+asia_01 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+asia_06 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(asia_96,asia_01,asia_06), caption = "Asia Deaths 1996-2006")
+
+#Asia 2007-2017
+asia_07 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+asia_12 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+asia_17 <- na.omit(asia)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(asia_07,asia_12,asia_17), caption = "Asia Deaths 2007-2017")
+
+
+#Oceania 1996-2006
+oceania_96 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 1996) %>% 
+  summarize(avg_deaths_96 = mean(total_deaths))
+
+oceania_01 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 2001) %>% 
+  summarize(avg_deaths_01 = mean(total_deaths))
+
+oceania_06 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 2006) %>% 
+  summarize(avg_deaths_06 = mean(total_deaths))
+
+kable(list(oceania_96,oceania_01,oceania_06), caption = "Oceania Deaths 1996-2006")
+
+#Oceania 2007-2017
+oceania_07 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 2007) %>% 
+  summarize(avg_deaths_07 = mean(total_deaths))
+
+oceania_12 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 2012) %>% 
+  summarize(avg_deaths_12 = mean(total_deaths))
+
+oceania_17 <- na.omit(oceania)  %>% 
+  group_by(country) %>% 
+  filter(year == 2017) %>% 
+  summarize(avg_deaths_17 = mean(total_deaths))
+
+kable(list(oceania_07,oceania_12,oceania_17), caption = "Oceania Deaths 2007-2017")
+```
+
+Based on these tables, we can see that Oceania countries had the lowest death counts over time across both decades. In Europe, although Germany is a high-populated country its death count was significantly less than Serbia, a low-populated country. This was similarly seen in Africa, where Malawi, a low-populated country, had a higher death count overall in comparison to Nigeria, a high-populated country. In Africa, there was the greatest amount of decrease in their average death count. Malawi decreased roughly 4,600,000 from 1996 to 2006.
+
+
+***
+
+Let's graph the previous tables!
+
+In the first graph we faceted the high-populated countries and look at the average death count in 1996 on the x-axis, the average death count in 2001 on the y-axis, and color the points by the average death count in 2006. The darker the points are the higher the death count was in 2006. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 1996, 2001, and 2006. 
+
+High Population first decade (1996-2006).
+```{r, echo=FALSE}
+#High Population Deaths 1996-2006
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= High_Deaths_96, y= High_Deaths_01, color= High_Deaths_06)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries", x="1996 Deaths", y="2001 Deaths")
+
+ggplotly(interact_high_first)
+
+#High Population Deaths 1996 
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_96, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+   xlab("Country")+
+  ylab("1996 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
+
+ggplotly(interact_high_first)
+
+#High Population Deaths 2001
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_01, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2001 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
+
+ggplotly(interact_high_first)
+
+#High Population Deaths 2006
+p_high_first <- all_high_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_06, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2006 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_first<- p_high_first + labs(title="High Populated Countries")
+
+ggplotly(interact_high_first)
+```
+
+***
+
+In the first graph we faceted the low-populated countries and look at the average death count in 1996 on the x-axis, the average death count in 2001 on the y-axis, and color the points by the average death count in 2006. The darker the points are the higher the death count was in 2006. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 1996, 2001, and 2006.
+
+Low Population first decade (1996-2006).
+```{r}
+#Low Population Deaths 1996-2006
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= Low_Deaths_96, y= Low_Deaths_01, color= Low_Deaths_06)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_low_first<- p_low_first + labs(title="Low Populated Countries", x="1996 Deaths", y="2001 Deaths")
+
+ggplotly(interact_low_first)
+
+#Low Population Deaths 1996 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_96, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("1996 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_first)
+
+#Low Population Deaths 2001 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_01, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2001 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_first)
+
+#Low Population Deaths 2006 
+p_low_first <- all_low_first %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_06, fill = country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2006 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_low_first<- p_low_first + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_first)
+```
+
+*** 
+
+In the first graph we faceted the high-populated countries and look at the average death count in 2007 on the x-axis, the average death count in 2012 on the y-axis, and color the points by the average death count in 2017. The darker the points are the higher the death count was in 2017. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 2007, 2012, and 2017. 
+
+High Population second decade (2007-2017).
+```{r, echo=FALSE}
+#High Population Deaths 2007-2017
+p_high_second <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= High_Deaths_07, y= High_Deaths_12, color= High_Deaths_17)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_high_second<- p_high_second + labs(title="High Populated Countries", x="2007 Deaths", y="2012 Deaths")
+
+ggplotly(interact_high_second)
+
+#High Population Deaths 2007
+p_high_second_07 <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_07, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2007 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_second_07<- p_high_second_07 + labs(title="High Populated Countries")
+
+ggplotly(interact_high_second_07)
+
+#High Population Deaths 2012
+p_high_second_12 <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_12, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2012 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_second_12<- p_high_second_12 + labs(title="High Populated Countries")
+
+ggplotly(interact_high_second_12)
+
+#High Population Deaths 2017
+p_high_second_17 <- all_high_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= High_Deaths_17, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2017 Deaths")+
+  geom_col(position = 'dodge')
+
+interact_high_second_17<- p_high_second_17 + labs(title="High Populated Countries")
+
+ggplotly(interact_high_second_17)
+```
+
+***
+In the first graph we faceted the low-populated countries and look at the average death count in 2007 on the x-axis, the average death count in 2012 on the y-axis, and color the points by the average death count in 2017. The darker the points are the higher the death count was in 2017. To get a closer look at the average death count in all 3 years we created individualized bar graphs for 2007, 2012, and 2017. 
+
+Low Population second decade (2007-2017)
+```{r}
+#Low Population Deaths 2007-2017
+p_low_second <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= Low_Deaths_07, y= Low_Deaths_12, color= Low_Deaths_17)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  geom_point() +
+  facet_wrap(~country)
+
+interact_low_second<- p_low_second + labs(title="Low Populated Countries", x="2007 Deaths", y="2012 Deaths")
+
+ggplotly(interact_low_second)
+
+#Low Population Deaths 2007
+p_low_second_07 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_07, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2007 Deaths")+
+  geom_col(position='dodge')
+
+interact_low_second_07<- p_low_second_07 + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_second_07)
+
+#Low Population Deaths 2012
+p_low_second_12 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_12, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2012 Deaths")+
+  geom_col(position='dodge')
+
+interact_low_second_12<- p_low_second_12 + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_second_12)
+         
+#Low Population Deaths 2017
+p_low_second_17 <- all_low_second %>%
+  group_by(country) %>% 
+  ggplot(aes(x= country, y= Low_Deaths_17, fill=country)) +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  xlab("Country")+
+  ylab("2017 Deaths")+
+  geom_col(position='dodge')
+
+interact_low_second_17<- p_low_second_17 + labs(title="Low Populated Countries")
+
+ggplotly(interact_low_second_17)
+
+```
+
+***
+
+> By comparing each pollutant type, we can determine which year and country had the highest numbers of deaths 
+
+Let's focus on Indoor Deaths first:
+```{r, echo=FALSE}
+#Indoor 1997-2017
+indoor_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("High Populated Indoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_high)
+
+indoor_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("Low Populated Indoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_low)
+
+
+indoor_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
+  group_by(country, year, indoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, indoor_deaths, color = country))+
+  ggtitle("Greatest Indoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(indoor_top)
+```
+
+It is interesting to see the decrease in both the high and low-populated countries over time. It is easier to see the difference in Malawi's indoor deaths. Pakistan and Malawi were the two countries with the highest indoor death count in our subset. Despite being a low-populated country, Malwai had much larger death counts.
+
+***
+
+Outdoor Deaths: 
+```{r, echo= FALSE}
+#Outdoor Particulate 1997-2017
+outdoor_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("High Populated Outdoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_high)
+
+outdoor_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("Low Populated Outdoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_low)
+
+outdoor_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Serbia')) %>% 
+  group_by(country, year, outdoor_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, outdoor_deaths, color = country))+
+  ggtitle("Greatest Outdoor Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(outdoor_top)
+```
+
+For outdoor deaths you can see that for high populated countries Pakistan is in the lead. There tends to be an interesting increase in Nigeria from 2014-2015. Also Germany and the United States are very neck in neck over the years. In the lower populated countries you can see that Serbia is in the lead. Sri Lanka does have a steep decline from 2015 to 2016 but before that it was really close with Tonga. When you look at the top 2 countries, Pakistan and Serbia, you can see that Pakistan is drastically higher.  2011 was the greatest number of deaths for Pakistan. 1997 was the greatest number of deaths for Serbia
+
+***
+Ozone Deaths 
+```{r, echo=FALSE}
+#Outdoor ozone 1997-2017
+ozone_high<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('United States', 'Brazil','Nigeria', 
+                                       'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("High Populated Ozone Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_high)
+
+ozone_low<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Canada', 'Chile', 'Malawi', 
+                                       'Serbia', 'Sri Lanka', 'Tonga')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("Low Populated Ozone Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_low)
+
+#Malawi and Pakistan were the top countries affected 
+#1997 had the greatest amount of ozone death in Pakistan
+ozone_top<- deaths_df %>% 
+    filter(year> 1995 & country %in% c('Pakistan', 'Malawi')) %>% 
+  group_by(country, year, ozone_deaths) %>% 
+  ggplot()+
+  geom_point(aes(year, ozone_deaths, color = country))+
+  ggtitle("Greatest Ozone Death 1997-2017")+
+  xlab("Year")+
+  ylab("Deaths per 100,000")
+ggplotly(ozone_top)
+```
+In the high-populated countries, the U.S. is the second-highest in ozone-related deaths and even increases over some years. We also see an increase in deaths in Pakistan, Chile, and Sri Lanka. Malawi is still one of the highest countries for ozone-related deaths, even though it saw the most decrease over time.
+
+# Which is worse? 
+> outdoor or indoor pollution?
+
+Let's reintroduce a graph we looked at earlier. Instead this time we will combine the pollutant types together.
+```{r, echo=FALSE}
+#Plot High Population
+h_pollutant<- ggplot(high_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
+  geom_point() +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  ggtitle("High Population Pollutant Type Death Counts")
+ggplotly(h_pollutant)
+
+#Plot Low Population
+l_pollutant<- ggplot(low_poll, aes(x=avg_indoor, y = avg_outdoor, color= avg_ozone)) + 
+  geom_point() +
+  scale_color_gradient2(low = "light pink", mid = "pink", high = "dark violet", aesthetics = "color") +
+  ggtitle("Low Population Pollutant Type Death Counts")
+ggplotly(l_pollutant)
+```
+
+In the high populated countries we can see that 2 countries exhibit higher indoor air pollutant deaths whereas the others depict higher outdoor deaths. In the lower populated countries you can see that half show higher outdoor air pollutant deaths and half show higher indoor air pollutant deaths. Therefore, we cannot conclude which is worse.
+
+# Summary 
+
+* Which country has the highest average death count?
+  + High Population: Pakistan
+  + Low Population: Malawi
+* Has the percentage of the affected population decreased or increased over time?
+  + Generally it is decreasing for both High and Low populated countries 
+* Which pollutant type has the greatest number of deaths?
+  + High Population: Indoor Pollution
+  + Low Population: Indoor Pollution
+* How has the death count changed over the past two decades?
+  + 1996-2006: 
+    - High Population: Decreases
+    - Low Population: Decreases
+  + 2007-2017: 
+    - High Population: Decreases 
+    - Low Population: Decreases
+* Which year and country had the highest number of deaths per pollutant type?
+  + We looked at years 1996-2017 
+  + Indoor: Pakistan and Malawi were mainly affected in 1996
+  + Outdoor: Serbia and Pakistan were the top countries. 
+    - 2011 was the worst for Pakistan. 
+    - 1997 was the worst for Serbia 
+    - Sri Lanka and Tonga increased, but Sri Lanka had a steep decrease after 2015 
+  + Outdoor Ozone: Pakistan and Malawi were the top countries. 
+    - 1997 was the worst for Pakistan. 
+    - 1998 was the worst for Malawi
+    - United States was the second highest amount of deaths among the higher populated countries
+    - Pakistan decreased and then slightly increased
+* Which is worse - outdoor or indoor pollution?
+  + Based on our sample set, it is inconclusive
+  + "According to the EPA (Environmental Protection Agency), however, the levels of indoor air pollutants are often 2 to 5 times higher than outdoor levels, and in some cases these levels can exceed 100 times that of outdoor levels of the same pollutants. In other words, sometimes the air inside can be more harmful than the air outside."
+
+
+There are so many factors affecting environmental data, another area of interest would be to look into the cultural, geographical, and historical climate of the country to see if any significant events occurred to skew the numbers during those years where great increases and decreases occurred. 
+
+To make the data more manageable we had to reduce the number of countries we looked at. This is why we selected one high populated country and one low populated country from each continent. We thought having a high and low populated country would give us a general idea on how air pollution affected each continent. Furthermore, we excluded Russia, China, and India because their populations were significantly large and wouldn't be a good representation of the average populations.
+
+Overall this project has sparked interest in environmental concerns. After seeing the impact we have in our environment's air pollution we are prone to be more conscious of how we treat our planet. We hope that this data has brought more awareness to others as well!
+
+# Sources
+* [https://www.kaggle.com/datasets/akshat0giri/death-due-to-air-pollution-19902017 ]
+
+* [https://www.worldometers.info/population/world/]
+
+* [https://www.who.int/health-topics/air-pollution#tab=tab_1]
+
+* [https://www.epa.gov/ground-level-ozone-pollution/ground-level-ozone-basics]
+
+* [https://www.health.nsw.gov.au/environment/air/Pages/outdoor-air-pollution.aspx]
+
+* [https://www.mana.md/indoor-air-vs-outdoor-air/]
+
+* [https://www.kaggle.com/datasets/imdevskp/world-population-19602018]
+

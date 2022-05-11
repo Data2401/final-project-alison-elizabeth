@@ -1,0 +1,82 @@
+##Population data
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+
+```
+
+```{r}
+pop_data_stats <- read.csv("pop_worldometer_data.csv")
+
+glimpse(pop_data_stats)
+
+world_pop <- read.csv("population_total_long.csv")
+
+glimpse(world_pop)
+
+#Let's compare the first decade 1996-2006 with second decade 2007-2017 
+high_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('United States', 'Brazil', 'Nigeria', 'Germany', 'Pakistan', 'Australia')) %>% 
+  group_by(Year)
+
+high_pop_countries
+
+
+low_pop_countries <- world_pop %>% 
+  filter(Year > 1996 & Country.Name %in% c('Canada', 'Chile', 'Malawi', 'Serbia', 'Sri Lanka', 'New Zealand'))%>% 
+  group_by(Year)
+
+low_pop_countries
+
+
+#General overview of data 
+head(world_pop, 12)
+
+```
+
+The above is 1960/2020 and our data is from 1990-2017
+This is a different file but won't open (resolved)
+```{r}
+#This is the data 
+pops_by_country <- read.csv("world_population_update.csv")
+head(pops_by_country)
+
+#The columns that we want 
+selected_pop <- pops_by_country %>% filter(Country.Name %in% c('United States', 'Brazil', 'Ethiopia','Russian Federation','China', 'Australia','Canada','Argentina','Seychelles','Romania','Israel', 'Tonga')) %>% select(Country.Name, Country.Code, X1990, X1991, X1992, X1993, X1994, X1995, X1996, X1997, X1998, X1999, X2000, X2001, X2002, X2003, X2004, X2005, X2006, X2007, X2008, X2009, X2010, X2011, X2012, X2013, X2014, X2015, X2016, X2017)
+
+#colnames(selected_pop) <- c()
+
+edit <- selected_pop %>% 
+  select(Country.Name, Country.Code, X1990, X1991, X1992, X1993, X1994, X1995, X1996, X1997, X1998, X1999, X2000, X2001, X2002, X2003, X2004, X2005, X2006, X2007, X2008, X2009, X2010, X2011, X2012, X2013, X2014, X2015, X2016, X2017) %>% 
+  rename(c('1990' = X1990, '1991'=X1991, '1992'=X1992, '1993'=X1993, '1994'=X1994, '1995'=X1995, '1996'=X1996, '1997'=X1997, '1998'=X1998, '1999'=X1999, '2000'=X2000, '2001'=X2001, '2002'=X2002, '2003'=X2003, '2004'=X2004, '2005'=X2005, '2006'=X2006, '2007'=X2007, '2008'=X2008, '2009'=X2009, '2010'=X2010, '2011'=X2011, '2012'=X2012, '2013'=X2013, '2014'=X2014, '2015'=X2015, '2016'=X2016, '2017'=X2017))
+
+edit
+```
+```{r}
+country_deaths <- deaths_df %>% 
+    filter(country %in% c('Canada', 'Argentina', 'Seychelles', 'Romania', 
+                          'Israel', 'Tonga','United States', 'Brazil', 
+                          'Ethiopia', 'Russia', 'China', 'Australia'))
+
+
+#joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
+#glimpse(joined_country_pop)
+#head(joined_country_pop, 15)
+
+joined_country_pop <- full_join(country_deaths, edit, by = c("country" = "Country.Name"))
+
+
+#ggplot(joined_df, aes(fill=Count, y=country, x=year)) + 
+#  geom_bar(position="stack", stat="identity")
+
+#pops_by_country$Country.Name[[Indicator.Name("Population, total" >= 130000000)]
+#rownames(table_name)[rownames(table_name) == "old label"] = "new label"
+```
+
+
+
